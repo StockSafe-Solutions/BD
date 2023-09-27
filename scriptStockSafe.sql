@@ -72,7 +72,7 @@ CREATE TABLE registro (
 );
 
 DELIMITER $$
-CREATE PROCEDURE stocksafe.inserirEmpresa(
+CREATE PROCEDURE inserirEmpresa(
     IN 
     razaoEmpresa varchar(50),
     telefone CHAR(12),
@@ -104,7 +104,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE stockSafe.inserirFuncionario(
+CREATE PROCEDURE inserirFuncionario(
     IN 
     nomeFuncionario VARCHAR(45),
     funcao VARCHAR(45),
@@ -146,14 +146,14 @@ CREATE OR REPLACE VIEW vw_demanda AS
         FROM registro AS r
         GROUP BY hora 
         ORDER BY hora DESC;
-CALL stockSafe.inserirEmpresa('B3 S.A. - BRASIL,BOLSA, BALCAO','551125655061','09346601000125','B3','Empresa','b3@gmail.com','123456','R. Quinze de Novembro',
+CALL inserirEmpresa('B3 S.A. - BRASIL,BOLSA, BALCAO','551125655061','09346601000125','B3','Empresa','b3@gmail.com','123456','R. Quinze de Novembro',
         275, 'São Paulo', '01010901');
 
-CALL stockSafe.inserirFuncionario('Henrique','Analista','2023-03-24',5000,'henrique@gmail.com','123456');
-CALL stockSafe.inserirFuncionario('Gabriel','Analista','2023-03-24',5000,'gabriel@gmail.com','123456');
-CALL stockSafe.inserirFuncionario('Gilberto','Analista','2023-03-24',5000,'Gilberto@gmail.com','123456');
-CALL stockSafe.inserirFuncionario('Sofhia','Analista','2023-03-24',5000,'sofhia@gmail.com','123456');
-CALL stockSafe.inserirFuncionario('Vinicius','Analista','2023-03-24',5000,'vinicius@gmail.com','123456');
+CALL inserirFuncionario('Henrique','Analista','2023-03-24',5000,'henrique@gmail.com','123456');
+CALL inserirFuncionario('Gabriel','Analista','2023-03-24',5000,'gabriel@gmail.com','123456');
+CALL inserirFuncionario('Gilberto','Analista','2023-03-24',5000,'Gilberto@gmail.com','123456');
+CALL inserirFuncionario('Sofhia','Analista','2023-03-24',5000,'sofhia@gmail.com','123456');
+CALL inserirFuncionario('Vinicius','Analista','2023-03-24',5000,'vinicius@gmail.com','123456');
 
 INSERT INTO componente VALUES(NULL, 'Memória RAM', 'Porcentagem'),
                             (NULL, 'Disco', 'Porcentagem'),
@@ -398,12 +398,3 @@ INSERT INTO registro VALUES
     (NULL, '2023-09-12 15:20', 13.2, 2004, 3),
     (NULL, '2023-09-12 16:35', 11.6, 2004, 1),
     (NULL, '2023-09-12 17:50', 53.1, 2004, 2);
-    
-    
-    
-    
-    
-    
-    
-
-
