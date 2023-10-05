@@ -398,3 +398,5 @@ INSERT INTO registro VALUES
     (NULL, '2023-09-12 15:20', 13.2, 2004, 3),
     (NULL, '2023-09-12 16:35', 11.6, 2004, 1),
     (NULL, '2023-09-12 17:50', 53.1, 2004, 2);
+    
+    select * from registro;
