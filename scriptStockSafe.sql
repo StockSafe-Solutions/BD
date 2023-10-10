@@ -2,74 +2,57 @@
 DROP DATABASE IF EXISTS StockSafe;
 CREATE DATABASE StockSafe;
 USE StockSafe;
-CREATE TABLE empresa (
-    idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
-    razao VARCHAR(50),
-    telefone CHAR(12),
-    cnpj CHAR(14)
-) AUTO_INCREMENT = 5000;
 
 CREATE TABLE funcionario (
-    idFuncionario INT PRIMARY KEY AUTO_INCREMENT,
+    id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
     funcao VARCHAR(45),
-    dataNascimento DATE,
+    data_nascimento DATE,
     foto VARCHAR(300),
-    fkEmpresa INT,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa),
-    fkGerente INT,
+    email VARCHAR(125),
+    senha VARCHAR(20),
+    fk_gerente INT,
     FOREIGN KEY (fkGerente) REFERENCES funcionario(idFuncionario)
 ) AUTO_INCREMENT = 1000;
-CREATE TABLE usuario(
-    idUsuario INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(45),
-    senha VARCHAR(45),
-    tipo CHAR(1),
-    fkFuncionario INT,
-    Foreign Key (fkFuncionario) REFERENCES funcionario(idFuncionario)
+
+CREATE TABLE servidor (
+	id_servidor INT PRIMARY KEY AUTO_INCREMENT,
+	codigo CHAR(6),
+	armazenamento_total DECIMAL(4,1),
+	armazenammento_usado DECIMAL(4,1),
+	id_autenticador INT
 );
 
-CREATE TABLE endereco (
-    idEndereco INT PRIMARY KEY AUTO_INCREMENT,
-    rua VARCHAR(50),
-    numero INT,
-    bairro VARCHAR(80),
-    complemento VARCHAR(30),
-    cep CHAR(8),
-    fkEmpresa INT,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa)
-) AUTO_INCREMENT = 10;
-CREATE TABLE maquina (
-    idMaquina INT PRIMARY KEY AUTO_INCREMENT,
-    qtdNucleos INT,
-    processadoresLogicos INT,
-    qtdMemoriaRam INT,
-    armazenamento INT,
-    fkEndereco INT,
-    FOREIGN KEY (fkEndereco) REFERENCES endereco(idEndereco)
-) AUTO_INCREMENT = 2000;
-CREATE TABLE componente (
-    idComponente INT PRIMARY KEY AUTO_INCREMENT,
-    descricao VARCHAR(45),
-    unidadeMedida VARCHAR(45)
-);
-
-CREATE TABLE componentesMonitorados (
-    fkMaquina INT,
-    FOREIGN KEY (fkMaquina) REFERENCES maquina(idMaquina),
-    fkComponente INT,
-    FOREIGN KEY (fkComponente) REFERENCES componente(idComponente),
-    PRIMARY KEY (fkMaquina, fkComponente)
-);
 CREATE TABLE registro (
-    idRegistro INT PRIMARY KEY AUTO_INCREMENT,
-    dataHora DATETIME,
-    valor DECIMAL(6,2),
-    fkMaquina INT,
-    FOREIGN KEY (fkMaquina) REFERENCES maquina(idMaquina),
-    fkComponente INT,
-    FOREIGN KEY (fkComponente) REFERENCES componente(idComponente)
+    id_registro INT PRIMARY KEY AUTO_INCREMENT,
+    data_hora DATETIME,
+    perda_de_pacotes TINYINT,
+    uso_cpu TINYINT,
+    uso_ram TINYINT,
+    taxa_transf TINYINT,
+	fk_servidor INT,
+    FOREIGN KEY (fk_servidor) REFERENCES servidor(id_servidor),
+    fk_tipo INT,
+    FOREIGN KEY (fk_tipo) REFERENCES tipo_componente(id_tipo)
 );
+
+
+CREATE TABLE tipo_componente (
+    id_tipo INT PRIMARY KEY AUTO_INCREMENT,
+    descricao VARCHAR(45),
+    unidade_medida VARCHAR(45)
+);
+
+CREATE TABLE opcao (
+	id_opcao INT PRIMARY KEY AUTO_INCREMENT,
+    banda_larga SMALLINT,
+    taxa_transferencia DECIMAL(10,2)
+    );
+    
+   
+
+
+
 
 DELIMITER $$
 CREATE PROCEDURE inserirEmpresa(
