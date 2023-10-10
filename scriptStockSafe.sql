@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS StockSafe;
 USE StockSafe ;
 
-CREATE TABLE IF NOT EXISTS funcionario (
+CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL,
   nome VARCHAR(125) NOT NULL,
   funcao VARCHAR(75) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
   );
   
 
-CREATE TABLE IF NOT EXISTS servidor (
+CREATE TABLE IF NOT EXISTS tb_servidor (
   id_servidor INT NOT NULL,
   codigo CHAR(6) NOT NULL,
   armazenamento_total DECIMAL(4,1) NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS servidor (
   FOREIGN KEY (id_autenticador) REFERENCES funcionario (id_funcionario)
     );
 
-CREATE TABLE IF NOT EXISTS tipo_componente (
+CREATE TABLE IF NOT EXISTS tb_tipo_componente (
   id_tipo INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
   unidade_medida VARCHAR(15) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS tipo_componente (
   );
   
 
-CREATE TABLE IF NOT EXISTS registro (
+CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL,
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS registro (
     );
     
     
-CREATE TABLE IF NOT EXISTS opcao (
+CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL,
   banda_larga SMALLINT NOT NULL,
   taxa_transferencia DECIMAL(10,2) NOT NULL,
