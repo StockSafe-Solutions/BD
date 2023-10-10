@@ -49,6 +49,10 @@ CREATE TABLE IF NOT EXISTS opcao (
   taxa_transferencia DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_opcao)
   );
+  
+-- CREATE USER 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
+-- GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+  
 
 
 
