@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS registro (
   id_registro INT NOT NULL,
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
-  perda_de_pacotes TINYINT NULL,
+  pacotes_enviados TINYINT NULL,
+  pacotes_perdidos TINYINT NULL,
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
@@ -100,8 +101,4 @@ INSERT INTO registro (id_registro, fk_servidor, data_hora, perda_de_pacotes, uso
         (13, 13, NOW(), 0, 10, 20, 60, 2),
         (14, 14, NOW(), 4, 16, 26, 85, 3),
 		(15, 15, NOW(), 3, 18, 28, 90, 3);
-
-
- 
-    
 
