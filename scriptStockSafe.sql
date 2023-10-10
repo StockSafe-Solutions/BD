@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   fk_tipo INT NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
-  FOREIGN KEY (fk_tipo) REFERENCES tb_tipo_componente (id_tipo)
+  FOREIGN KEY (fk_tipo) REFERENCES tb_categoria (id_tipo)
     );
     
     
