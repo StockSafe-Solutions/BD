@@ -84,7 +84,9 @@ INSERT INTO servidor (codigo, armazenamento_total, armazenamento_usado, id_auten
         ('SRV019', 150.1, 75.0, 1),
 		('SRV020', 400.4, 200.2, 1);
 
-INSERT INTO tipo_componente (nome, unidade_medida) VALUES ('RAM', '%'), ('Taxa de Transferência', 'Gb/s'), ('CPU', '%');
+INSERT INTO tipo_componente (nome, unidade_medida) VALUES ('RAM', '%'),
+														  ('Taxa de Transferência', 'Gb/s'),
+														  ('CPU', '%');
 
 INSERT INTO registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES 
 		(2001, NOW(), 30, 1),
@@ -102,4 +104,40 @@ INSERT INTO registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES
         (2003, NOW(), 20, 1),
         (2003, NOW(), 26, 1),
 		(2003, NOW(), 28, 1);
+
+INSERT INTO registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUES 
+		(2001, NOW(), 100, 2),
+		(2001, NOW(), 80, 2),
+        (2001, NOW(), 60, 2),
+        (2001, NOW(), 90, 2),
+        (2001, NOW(), 70, 2),
+        (2002, NOW(), 85, 2),
+        (2002, NOW(), 75, 2),
+        (2002, NOW(), 60, 2),
+        (2002, NOW(), 105, 2),
+        (2002, NOW(), 70, 2),
+        (2003, NOW(), 90, 2),
+        (2003, NOW(), 80, 2),
+        (2003, NOW(), 60, 2),
+        (2003, NOW(), 85, 2),
+		(2003, NOW(), 90, 2);
+        
+INSERT INTO registro (fk_servidor, data_hora, uso_cpu, fk_tipo) VALUES 
+		(2001, NOW(), 10, 3),
+		(2001, NOW(), 15, 3),
+        (2001, NOW(), 12, 3),
+        (2001, NOW(), 17, 3),
+        (2001, NOW(), 20, 3),
+        (2002, NOW(), 23, 3),
+        (2002, NOW(), 20, 3),
+        (2002, NOW(), 19, 3),
+        (2002, NOW(), 15, 3),
+        (2002, NOW(), 20, 3),
+        (2003, NOW(), 21, 3),
+        (2003, NOW(), 18, 3),
+        (2003, NOW(), 17, 3),
+        (2003, NOW(), 15, 3),
+		(2003, NOW(), 14, 3);
+        
+        
 
