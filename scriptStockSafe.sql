@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
     ) 
     AUTO_INCREMENT = 2000;
 
-CREATE TABLE IF NOT EXISTS tb_tipo_componente (
+CREATE TABLE IF NOT EXISTS tb_categoria (
   id_tipo INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
   unidade_medida VARCHAR(15) NOT NULL,
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
 
 -- LISTA DE INSERTS
   
-INSERT INTO funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 'danilo@gmal.com', 'urubu100');
+INSERT INTO tb_funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 'danilo@gmal.com', 'urubu100');
 
-INSERT INTO servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
+INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
 		('SRV001', 500.5, 250.2, 1),
 		('SRV002', 750.0, 375.5, 1),
         ('SRV003', 300.3, 150.1, 1),
@@ -84,11 +84,11 @@ INSERT INTO servidor (codigo, armazenamento_total, armazenamento_usado, id_auten
         ('SRV019', 150.1, 75.0, 1),
 		('SRV020', 400.4, 200.2, 1);
 
-INSERT INTO tipo_componente (nome, unidade_medida) VALUES ('RAM', '%'),
+INSERT INTO tb_categoria (nome, unidade_medida) VALUES ('RAM', '%'),
 														  ('Taxa de Transferência', 'Gb/s'),
 														  ('CPU', '%');
 
-INSERT INTO registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES 
 		(2001, NOW(), 30, 1),
 		(2001, NOW(), 25, 1),
         (2001, NOW(), 20, 1),
@@ -105,7 +105,7 @@ INSERT INTO registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES
         (2003, NOW(), 26, 1),
 		(2003, NOW(), 28, 1);
 
-INSERT INTO registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUES 
 		(2001, NOW(), 100, 2),
 		(2001, NOW(), 80, 2),
         (2001, NOW(), 60, 2),
@@ -122,7 +122,7 @@ INSERT INTO registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUE
         (2003, NOW(), 85, 2),
 		(2003, NOW(), 90, 2);
         
-INSERT INTO registro (fk_servidor, data_hora, uso_cpu, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_tipo) VALUES 
 		(2001, NOW(), 10, 3),
 		(2001, NOW(), 15, 3),
         (2001, NOW(), 12, 3),
