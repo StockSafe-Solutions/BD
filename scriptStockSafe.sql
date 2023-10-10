@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   armazenamento_usado DECIMAL(4,1) NULL,
   id_autenticador INT NOT NULL,
   PRIMARY KEY (id_servidor, id_autenticador),
-  FOREIGN KEY (id_autenticador) REFERENCES funcionario (id_funcionario)
+  FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
 
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   taxa_transferencia TINYINT NULL,
   fk_tipo INT NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor),
-  FOREIGN KEY (fk_servidor) REFERENCES servidor (id_servidor),
-  FOREIGN KEY (fk_tipo) REFERENCES tipo_componente (id_tipo)
+  FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
+  FOREIGN KEY (fk_tipo) REFERENCES tb_tipo_componente (id_tipo)
     );
     
     
