@@ -25,10 +25,10 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
     AUTO_INCREMENT = 2000;
 
 CREATE TABLE IF NOT EXISTS tb_categoria (
-  id_tipo INT NOT NULL AUTO_INCREMENT,
+  id_cat INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
   unidade_medida VARCHAR(15) NOT NULL,
-  PRIMARY KEY (id_tipo)
+  PRIMARY KEY (id_cat)
   );
   
 
@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
-  fk_tipo INT NOT NULL,
+  fk_cat INT NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
-  FOREIGN KEY (fk_tipo) REFERENCES tb_categoria (id_tipo)
+  FOREIGN KEY (fk_cat) REFERENCES tb_categoria (id_cat)
     );
     
     
@@ -88,7 +88,7 @@ INSERT INTO tb_categoria (nome, unidade_medida) VALUES ('RAM', '%'),
 														  ('Taxa de Transferência', 'Gb/s'),
 														  ('CPU', '%');
 
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_cat) VALUES 
 		(2001, NOW(), 30, 1),
 		(2001, NOW(), 25, 1),
         (2001, NOW(), 20, 1),
@@ -105,7 +105,7 @@ INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES
         (2003, NOW(), 26, 1),
 		(2003, NOW(), 28, 1);
 
-INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_cat) VALUES 
 		(2001, NOW(), 100, 2),
 		(2001, NOW(), 80, 2),
         (2001, NOW(), 60, 2),
@@ -122,7 +122,7 @@ INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VA
         (2003, NOW(), 85, 2),
 		(2003, NOW(), 90, 2);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_cat) VALUES 
 		(2001, NOW(), 10, 3),
 		(2001, NOW(), 15, 3),
         (2001, NOW(), 12, 3),
