@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
 CREATE TABLE IF NOT EXISTS tb_categoria (
   id_cat INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
-  unidade_medida VARCHAR(15) NOT NULL,
+  unidade_medida VARCHAR(15),
   PRIMARY KEY (id_cat)
   );
   
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT NOW(),
-  pacotes_enviados TINYINT NULL,
+  pacotes_enviados SMALLINT NULL,
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
@@ -85,7 +85,8 @@ INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_au
 
 INSERT INTO tb_categoria (nome, unidade_medida) VALUES ('RAM', '%'),
 														  ('Taxa de Transferência', 'Gb/s'),
-														  ('CPU', '%');
+														  ('CPU', '%'),
+                                                          ('Pacotes',null);
 
 INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_cat) VALUES 
 		(2001, '2023-10-11 10:00:00', 30, 1),
@@ -137,3 +138,20 @@ INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_cat) VALUES
         (2003, '2023-10-11 14:00:00', 17, 3),
         (2003, '2023-10-11 16:00:00', 15, 3),
 		(2003, '2023-10-11 18:00:00', 14, 3);
+        
+INSERT INTO tb_registro (fk_servidor, data_hora, pacotes_enviados, fk_cat) VALUES 
+		(2001, '2023-10-11 10:00:00', 930, 4),
+		(2001, '2023-10-11 12:00:00', 821, 4),
+        (2001, '2023-10-11 14:00:00', 1403, 4),
+        (2001, '2023-10-11 16:00:00', 1203, 4),
+        (2001, '2023-10-11 18:00:00', 653, 4),
+        (2002, '2023-10-11 10:00:00', 1204, 4),
+        (2002, '2023-10-11 12:00:00', 2302, 4),
+        (2002, '2023-10-11 14:00:00', 1843, 4),
+        (2002, '2023-10-11 16:00:00', 1483, 4),
+        (2002, '2023-10-11 18:00:00', 694, 4),
+        (2003, '2023-10-11 10:00:00', 349, 4),
+        (2003, '2023-10-11 12:00:00', 1458, 4),
+        (2003, '2023-10-11 14:00:00', 1953, 4),
+        (2003, '2023-10-11 16:00:00', 2494, 4),
+		(2003, '2023-10-11 18:00:00', 940, 4);

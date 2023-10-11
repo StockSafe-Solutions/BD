@@ -7,3 +7,4 @@ CREATE PROCEDURE sp_cpu_maquina(v_fk_servidor INT)
 $$ DELIMITER ;
 CALL sp_cpu_maquina(2001);
 
+SELECT AVG(pacotes_enviados) FROM tb_registro GROUP BY fk_servidor
