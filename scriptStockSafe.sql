@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
 -- LISTA DE INSERTS
   
 INSERT INTO tb_funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 'danilo@gmal.com', 'urubu100');
+INSERT INTO tb_funcionario VALUES (2,'Gustavo Pereira','Programador','2005-06-13', null, 'gustavo.castro@gmail.com', 'Urubu100.');
 
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
 		('SRV001', 500.5, 250.2, 1),
