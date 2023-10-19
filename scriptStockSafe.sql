@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS StockSafe;
 USE StockSafe ;
 
+-- drop database StockSafe;
+
 CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(125) NOT NULL,
@@ -25,10 +27,10 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
     AUTO_INCREMENT = 2000;
 
 CREATE TABLE IF NOT EXISTS tb_categoria (
-  id_tipo INT NOT NULL AUTO_INCREMENT,
+  id_categoria INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
   unidade_medida VARCHAR(15) NOT NULL,
-  PRIMARY KEY (id_tipo)
+  PRIMARY KEY (id_categoria)
   );
   
 
@@ -37,14 +39,13 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
   pacotes_enviados TINYINT NULL,
-  pacotes_perdidos TINYINT NULL,
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
-  fk_tipo INT NOT NULL,
+  fk_categoria INT NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
-  FOREIGN KEY (fk_tipo) REFERENCES tb_categoria (id_tipo)
+  FOREIGN KEY (fk_categoria) REFERENCES tb_categoria (id_categoria)
     );
     
     
@@ -90,7 +91,7 @@ INSERT INTO tb_categoria (nome, unidade_medida) VALUES ('RAM', '%'),
 														('Taxa de Transferência', 'Gb/s'),
 														('CPU', '%');
 
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_categoria) VALUES 
 		(2001, NOW(), 30, 1),
 		(2001, NOW(), 25, 1),
         (2001, NOW(), 20, 1),
@@ -107,7 +108,7 @@ INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_tipo) VALUES
         (2003, NOW(), 26, 1),
 		(2003, NOW(), 28, 1);
 
-INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_categoria) VALUES 
 		(2001, NOW(), 100, 2),
 		(2001, NOW(), 80, 2),
         (2001, NOW(), 60, 2),
@@ -124,7 +125,7 @@ INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_tipo) VA
         (2003, NOW(), 85, 2),
 		(2003, NOW(), 90, 2);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_tipo) VALUES 
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_categoria) VALUES 
 		(2001, NOW(), 10, 3),
 		(2001, NOW(), 15, 3),
         (2001, NOW(), 12, 3),
@@ -157,7 +158,7 @@ SELECT * FROM vw_cpu;
 CREATE OR REPLACE VIEW vw_ram AS SELECT 
 	r.id_registro as 'Registro',
     r.fk_servidor as 'Servidor',
-    r.fk_tipo as 'Componente',
+    r.fk_categoria as 'Categoria',
     r.uso_ram as 'Uso', 
     r.data_hora as 'Data/Hora'
 FROM tb_registro AS r
@@ -166,12 +167,35 @@ ORDER BY data_hora DESC;
 
 SELECT * FROM vw_ram;
 
+-- Taxa de Transferencia
+CREATE OR REPLACE VIEW vw_taxa_transferencia AS
+	SELECT 
+		r.id_registro as 'Registro',
+		r.fk_servidor as 'Servidor',
+		r.fk_categoria as 'Categoria',
+		r.taxa_transferencia as 'Taxa de Transferência', 
+		r.data_hora as 'Data/Hora'
+	FROM tb_registro AS r
+	WHERE r.fk_categoria = 2
+	GROUP BY data_hora, fk_servidor, id_registro
+	ORDER BY data_hora DESC; 
+    
+SELECT * FROM vw_taxa_transferencia;   
 
 -- USO DE BANDA LARGA TOTAL
 
+DELIMITER //
+CREATE PROCEDURE sp_uso_banda_larga()
+BEGIN
+    DECLARE limite INT;
 
+    SET limite = (select count(id_servidor) from tb_servidor);
+    
+    SELECT round(sum(`Taxa de Transferência`), 2) as 'Uso da banda larga total' from vw_taxa_transferencia LIMIT limite;
+END //
+DELIMITER ;
 
-
+call sp_uso_banda_larga();
 
 -- OCUPAÇÃO DE BANDA LARGA POR SERVIDOR   
 CREATE OR REPLACE VIEW vw_banda_larga
@@ -201,10 +225,6 @@ AS SELECT
 	FROM tb_servidor GROUP BY id_servidor, (armazenamento_usado/armazenamento_total) * 100;
     
 SELECT * FROM vw_armz_usado;
-
-
--- SERVIDORES LIGADOS
-
 
 -- MÉDIA DE PACOTES RECEBIDOS NA SEMANA
 CREATE VIEW vw_media_pacotes_semana AS
