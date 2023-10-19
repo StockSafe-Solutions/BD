@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   codigo CHAR(6) NOT NULL,
   armazenamento_total DECIMAL(4,1) NULL,
   armazenamento_usado DECIMAL(4,1) NULL,
-  id_autenticador INT NOT NULL,
-  PRIMARY KEY (id_servidor, id_autenticador),
+  id_autenticador INT,
+  PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
   banda_larga SMALLINT NOT NULL,
   taxa_transferencia DECIMAL(10,2) NOT NULL,
+  intervalo_atualizacao INT NOT NULL,
   PRIMARY KEY (id_opcao)
   );
   
@@ -156,3 +157,5 @@ INSERT INTO tb_registro (fk_servidor, data_hora, pacotes_enviados, fk_cat) VALUE
         (2003, '2023-10-11 14:00:00', 1953, 4),
         (2003, '2023-10-11 16:00:00', 2494, 4),
 		(2003, '2023-10-11 18:00:00', 940, 4);
+	
+INSERT INTO tb_opcao VALUES (NULL, 1500, 50.25, 60000);
