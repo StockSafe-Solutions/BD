@@ -206,13 +206,12 @@ FROM tb_opcao GROUP BY Id, Servidor, Banda;
 SELECT * FROM vw_banda_larga;
 
 -- UPTIME
-CREATE VIEW vw_uptime AS
-	SELECT DATE(data_hora) as dia, fk_servidor, round(((COUNT(data_hora)/4)*100)/5) as uptime
+CREATE OR REPLACE VIEW vw_uptime AS
+	SELECT DATE(data_hora) as dia, fk_servidor, round(((COUNT(data_hora)/4)*100)/9) as uptime
 		FROM tb_registro
 		GROUP BY fk_servidor, DATE(data_hora);
         
 SELECT * FROM vw_uptime;
-
         
 -- ARMAZENAMENTO USADO
 CREATE OR REPLACE VIEW vw_armz_usado
@@ -224,7 +223,7 @@ AS SELECT
 SELECT * FROM vw_armz_usado;
 
 -- MÉDIA DE PACOTES RECEBIDOS NA SEMANA
-CREATE VIEW vw_media_pacotes_semana AS
+CREATE OR REPLACE VIEW vw_media_pacotes_semana AS
 	SELECT fk_servidor,round(AVG(pacotes_enviados)) FROM tb_registro 
 		WHERE (pacotes_enviados IS NOT NULL) AND (data_hora > date_sub(curdate(), INTERVAL 7 DAY))
 		GROUP BY fk_servidor;
@@ -238,7 +237,14 @@ CREATE VIEW vw_servidor AS
 		FROM tb_servidor AS s
 		LEFT JOIN(SELECT fk_servidor, max(data_hora) as data_hora 
 					FROM tb_registro GROUP BY fk_servidor) AS d
-			ON s.id_servidor = d.fk_servidor;
+		ON s.id_servidor = d.fk_servidor;
             
+SELECT * FROM vw_servidor;
+-- KPI's
+-- UPTIME GERAL
+SELECT ROUND(AVG(uptime)) from vw_uptime;
+
+-- ESPAÇO USADO (DISCO) ESPECIFICO
+SELECT armazenamento_usado FROM vw_servidor;
+
 SELECT * FROM vw_media_pacotes_semana;
-select * from tb_funcionario;
