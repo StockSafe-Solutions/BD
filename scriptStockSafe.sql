@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   codigo CHAR(6) NOT NULL,
   armazenamento_total DECIMAL(4,1) NULL,
   armazenamento_usado DECIMAL(4,1) NULL,
-  id_autenticador INT,
-  PRIMARY KEY (id_servidor),
+  id_autenticador INT NOT NULL,
+  PRIMARY KEY (id_servidor, id_autenticador),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
@@ -53,8 +53,9 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
   banda_larga SMALLINT NOT NULL,
   taxa_transferencia DECIMAL(10,2) NOT NULL,
-  intervalo_atualizacao INT NOT NULL,
-  PRIMARY KEY (id_opcao)
+  fk_servidor INT NOT NULL,
+  PRIMARY KEY (id_opcao, fk_servidor),
+  FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor)
   );
   
 -- CREATE USER 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
@@ -124,39 +125,24 @@ INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_categori
         (2003, NOW(), 85, 2),
 		(2003, NOW(), 90, 2);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_cat) VALUES 
-		(2001, '2023-10-11 10:00:00', 10, 3),
-		(2001, '2023-10-11 12:00:00', 15, 3),
-        (2001, '2023-10-11 14:00:00', 12, 3),
-        (2001, '2023-10-11 16:00:00', 17, 3),
-        (2001, '2023-10-11 18:00:00', 20, 3),
-        (2002, '2023-10-11 10:00:00', 23, 3),
-        (2002, '2023-10-11 12:00:00', 20, 3),
-        (2002, '2023-10-11 14:00:00', 19, 3),
-        (2002, '2023-10-11 16:00:00', 15, 3),
-        (2002, '2023-10-11 18:00:00', 20, 3),
-        (2003, '2023-10-11 10:00:00', 21, 3),
-        (2003, '2023-10-11 12:00:00', 18, 3),
-        (2003, '2023-10-11 14:00:00', 17, 3),
-        (2003, '2023-10-11 16:00:00', 15, 3),
-		(2003, '2023-10-11 18:00:00', 14, 3);
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_categoria) VALUES 
+		(2001, NOW(), 10, 3),
+		(2001, NOW(), 15, 3),
+        (2001, NOW(), 12, 3),
+        (2001, NOW(), 17, 3),
+        (2001, NOW(), 20, 3),
+        (2002, NOW(), 23, 3),
+        (2002, NOW(), 20, 3),
+        (2002, NOW(), 19, 3),
+        (2002, NOW(), 15, 3),
+        (2002, NOW(), 20, 3),
+        (2003, NOW(), 21, 3),
+        (2003, NOW(), 18, 3),
+        (2003, NOW(), 17, 3),
+        (2003, NOW(), 15, 3),
+		(2003, NOW(), 14, 3);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, pacotes_enviados, fk_cat) VALUES 
-		(2001, '2023-10-11 10:00:00', 930, 4),
-		(2001, '2023-10-11 12:00:00', 821, 4),
-        (2001, '2023-10-11 14:00:00', 1403, 4),
-        (2001, '2023-10-11 16:00:00', 1203, 4),
-        (2001, '2023-10-11 18:00:00', 653, 4),
-        (2002, '2023-10-11 10:00:00', 1204, 4),
-        (2002, '2023-10-11 12:00:00', 2302, 4),
-        (2002, '2023-10-11 14:00:00', 1843, 4),
-        (2002, '2023-10-11 16:00:00', 1483, 4),
-        (2002, '2023-10-11 18:00:00', 694, 4),
-        (2003, '2023-10-11 10:00:00', 349, 4),
-        (2003, '2023-10-11 12:00:00', 1458, 4),
-        (2003, '2023-10-11 14:00:00', 1953, 4),
-        (2003, '2023-10-11 16:00:00', 2494, 4),
-		(2003, '2023-10-11 18:00:00', 940, 4);
+
 
 -- SESSÃO DAS VIEWS
 
@@ -250,6 +236,3 @@ SELECT * FROM vw_media_pacotes_semana;
 
 
 
-
-	
-INSERT INTO tb_opcao VALUES (NULL, 1500, 50.25, 60000);
