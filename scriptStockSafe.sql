@@ -140,7 +140,8 @@ INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_categoria) VALUES
         (2003, NOW(), 15, 3),
 		(2003, NOW(), 14, 3);
         
-
+INSERT INTO tb_opcao VALUES
+(NULL, 100, 2000.89, 60000, 2001);
 
 -- SESSÃO DAS VIEWS
 
