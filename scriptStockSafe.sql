@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS tb_funcionario (
   PRIMARY KEY (id_funcionario)
   );
   
-
 CREATE TABLE IF NOT EXISTS tb_servidor (
   id_servidor INT NOT NULL AUTO_INCREMENT,
   codigo CHAR(6) NOT NULL,
@@ -33,7 +32,6 @@ CREATE TABLE IF NOT EXISTS tb_categoria (
   PRIMARY KEY (id_categoria)
   );
   
-
 CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
   fk_servidor INT NOT NULL,
@@ -48,11 +46,11 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   FOREIGN KEY (fk_categoria) REFERENCES tb_categoria (id_categoria)
     );
     
-    
 CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
-  banda_larga SMALLINT NOT NULL,
-  taxa_transferencia DECIMAL(10,2) NOT NULL,
+  banda_larga SMALLINT DEFAULT(155),
+  taxa_transferencia DECIMAL(10,2) DEFAULT(1000.00),
+  intervalo_atualizacao INT DEFAULT(60000),
   fk_servidor INT NOT NULL,
   PRIMARY KEY (id_opcao, fk_servidor),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor)
@@ -153,7 +151,6 @@ CREATE VIEW vw_cpu AS
 
 SELECT * FROM vw_cpu;
 
-
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS SELECT 
 	r.id_registro as 'Registro',
@@ -180,7 +177,7 @@ CREATE OR REPLACE VIEW vw_taxa_transferencia AS
 	GROUP BY data_hora, fk_servidor, id_registro
 	ORDER BY data_hora DESC; 
     
-SELECT * FROM vw_taxa_transferencia;   
+SELECT * FROM vw_taxa_transferencia;  
 
 -- USO DE BANDA LARGA TOTAL
 
@@ -206,7 +203,6 @@ AS SELECT
 FROM tb_opcao GROUP BY Id, Servidor, Banda;
 
 SELECT * FROM vw_banda_larga;
-
 
 -- UPTIME
 CREATE VIEW vw_uptime AS
@@ -244,3 +240,4 @@ CREATE VIEW vw_servidor AS
 			ON s.id_servidor = d.fk_servidor;
             
 SELECT * FROM vw_media_pacotes_semana;
+select * from tb_funcionario;
