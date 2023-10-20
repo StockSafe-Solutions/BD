@@ -242,9 +242,32 @@ CREATE VIEW vw_servidor AS
 SELECT * FROM vw_servidor;
 -- KPI's
 -- UPTIME GERAL
-SELECT ROUND(AVG(uptime)) from vw_uptime;
+SELECT ROUND(AVG(up.uptime)) AS 'Média de uptime', 
+reg.data_hora
+FROM vw_uptime AS up
+JOIN tb_registro AS reg ON
+DATE(reg.data_hora) = CURDATE()
+GROUP BY reg.data_hora;
 
+
+-- USO BANDA LARGA
+
+-- PACOTES ENVIADOS
+
+-- ESPAÇO USADO (DSICO) GERAL
+
+-- MÉDIA DE USO CPU
+
+-- MÉDEIA DE USO RAM
+
+
+-- UPTIME
+-- TAXA DE TRANSFERÊNCIA
+-- PACOTES ENVIADOS
 -- ESPAÇO USADO (DISCO) ESPECIFICO
 SELECT armazenamento_usado FROM vw_servidor;
+-- USO CPU
+-- USO RAM
+
 
 SELECT * FROM vw_media_pacotes_semana;
