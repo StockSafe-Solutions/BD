@@ -231,8 +231,16 @@ CREATE VIEW vw_media_pacotes_semana AS
 	SELECT fk_servidor,round(AVG(pacotes_enviados)) FROM tb_registro 
 		WHERE (pacotes_enviados IS NOT NULL) AND (data_hora > date_sub(curdate(), INTERVAL 7 DAY))
 		GROUP BY fk_servidor;
-	
+
+-- VIEW DOS SERVIDORES
+CREATE VIEW vw_servidor AS
+	SELECT 
+	s.*,
+	DATE_FORMAT(d.data_hora,"%d/%m/%Y") as ultimaData,
+	DATE_FORMAT(d.data_hora,"%H:%i") as ultimoHorario
+		FROM tb_servidor AS s
+		LEFT JOIN(SELECT fk_servidor, max(data_hora) as data_hora 
+					FROM tb_registro GROUP BY fk_servidor) AS d
+			ON s.id_servidor = d.fk_servidor;
+            
 SELECT * FROM vw_media_pacotes_semana;
-
-
-
