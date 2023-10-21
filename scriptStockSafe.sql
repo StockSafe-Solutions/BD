@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
-  pacotes_enviados TINYINT NULL,
+  pacotes_enviados INT NULL,
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
@@ -56,12 +56,14 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor)
   );
   
--- CREATE USER 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
--- GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
+GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+FLUSH PRIVILEGES;
 
 -- LISTA DE INSERTS
   
 INSERT INTO tb_funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 'danilo@gmal.com', 'urubu100');
+INSERT INTO tb_funcionario VALUES (2,'Gustavo','Designer','2005-06-13',null,'gustavo@gmail.com','urubu100');
 
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
 		('SRV001', 500.5, 250.2, 1),
