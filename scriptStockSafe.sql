@@ -240,8 +240,10 @@ CREATE VIEW vw_servidor AS
 		ON s.id_servidor = d.fk_servidor;
             
 SELECT * FROM vw_servidor;
+
 -- KPI's
 -- UPTIME GERAL
+-- Por data:
 SELECT ROUND(AVG(up.uptime)) AS 'Média de uptime', 
 reg.data_hora
 FROM vw_uptime AS up
@@ -249,12 +251,23 @@ JOIN tb_registro AS reg ON
 DATE(reg.data_hora) = CURDATE()
 GROUP BY reg.data_hora;
 
+-- Por hora
+SELECT ROUND(AVG(up.uptime)) AS media_uptime, 
+reg.data_hora
+FROM vw_uptime AS up
+JOIN tb_registro AS reg ON
+HOUR(reg.data_hora) = HOUR(NOW())
+GROUP BY reg.data_hora;
 
 -- USO BANDA LARGA
-
+SELECT SUM(bdl.Banda) AS total_banda
+FROM vw_banda_larga AS bdl;
+ 
 -- PACOTES ENVIADOS
 
--- ESPAÇO USADO (DSICO) GERAL
+-- ESPAÇO USADO (DISCO) GERAL
+SELECT ROUND(AVG(arm.armazenamento_usado)) AS media_uso_armazenamento
+FROM vw_armz_usado AS arm;
 
 -- MÉDIA DE USO CPU
 
