@@ -288,8 +288,12 @@ ON HOUR(reg.data_hora) = HOUR(NOW())
 GROUP BY reg.data_hora;
 
 -- MÉDEIA DE USO RAM
-SELECT ROUND(AVG(vw_cpu.uso_cpu)) as media_uso_cpu
-FROM vw_cpu;
+SELECT ROUND(AVG(vw_ram.uso_cpu)) as media_uso_cpu,
+reg.data_hora
+FROM vw_cpu
+JOIN tb_registro AS reg
+ON HOUR(reg.data_hora) = HOUR(NOW())
+GROUP BY reg.data_hora;
 
 -- UPTIME
 -- TAXA DE TRANSFERÊNCIA
@@ -298,6 +302,6 @@ FROM vw_cpu;
 SELECT armazenamento_usado FROM vw_servidor;
 -- USO CPU
 -- USO RAM
-
+SELECT Uso FROM vw_ram WHERE Uso IS NOT NULL;
 
 SELECT * FROM vw_media_pacotes_semana;
