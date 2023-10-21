@@ -251,53 +251,104 @@ SELECT * FROM vw_servidor;
 
 -- ============ KPI's
 -- UPTIME GERAL
-SELECT ROUND(AVG(up.uptime)) AS total_uptime
-FROM vw_uptime AS up
-JOIN tb_registro AS reg ON
-DATE(reg.data_hora) = CURDATE()
-GROUP BY reg.data_hora;
-
+CREATE OR REPLACE VIEW vw_total_uptime AS
+	SELECT ROUND(AVG(up.uptime)) AS total_uptime
+	FROM vw_uptime AS up
+	JOIN tb_registro AS reg ON
+	DATE(reg.data_hora) = CURDATE()
+	GROUP BY reg.data_hora;
 -- USO BANDA LARGA GERAL
-SELECT SUM(bdl.Banda) AS total_banda
-FROM vw_banda_larga AS bdl;
- 
+CREATE OR REPLACE VIEW vw_total_banda AS
+	SELECT SUM(bdl.Banda) AS total_banda
+	FROM vw_banda_larga AS bdl;
 -- PACOTES ENVIADOS GERAL
-SELECT SUM(pacotes_enviados) AS total_pacotes_enviados
-FROM tb_registro;
-
+CREATE OR REPLACE VIEW vw_total_pacotes_enviados AS
+	SELECT SUM(pacotes_enviados) AS total_pacotes_enviados
+	FROM tb_registro;
 -- ESPAÇO USADO (DISCO) GERAL
-SELECT ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS total_espaco_uso
-FROM vw_servidor AS serv;
-
+CREATE OR REPLACE VIEW vw_total_espaco_uso AS
+	SELECT ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS total_espaco_uso
+	FROM vw_servidor AS serv;
 -- MÉDIA DE USO CPU
-SELECT ROUND(AVG(vw_cpu.uso_cpu)) as total_media_cpu
-FROM vw_cpu;
-
+CREATE OR REPLACE VIEW vw_total_media_cpu AS
+	SELECT ROUND(AVG(vw_cpu.uso_cpu)) as total_media_cpu
+	FROM vw_cpu;
 -- MÉDIA DE USO RAM
-SELECT ROUND(AVG(vw_ram.Uso)) as total_media_ram
-FROM vw_ram;
-
+CREATE OR REPLACE VIEW vw_total_media_ram AS
+	SELECT ROUND(AVG(vw_ram.Uso)) as total_media_ram
+	FROM vw_ram;
+    
 
 -- UPTIME ESPECIFICO
-SELECT uptime FROM vw_uptime;
-
+CREATE OR REPLACE VIEW vw_espec_uptime AS
+	SELECT uptime 
+    FROM vw_uptime;
 -- TAXA DE TRANSFERÊNCIA ESPECIFICO
-SELECT taxa_transferencia FROM tb_registro 
-WHERE taxa_transferencia IS NOT NULL;
-
+CREATE OR REPLACE VIEW vw_espec_transferencia AS
+	SELECT taxa_transferencia 
+    FROM tb_registro 
+	WHERE taxa_transferencia IS NOT NULL;
 -- PACOTES ENVIADOS ESPECIFICO
-SELECT SUM(pacotes_enviados) FROM tb_registro
-WHERE pacotes_enviados IS NOT NULL;
-
+CREATE OR REPLACE VIEW vw_espec_pacotes AS
+	SELECT SUM(pacotes_enviados) AS pacotes_enviados
+    FROM tb_registro
+	WHERE pacotes_enviados IS NOT NULL;
 -- ESPAÇO USADO (DISCO) ESPECIFICO
-SELECT armazenamento_usado FROM vw_servidor;
-
+CREATE OR REPLACE VIEW vw_espec_espaco_uso AS
+	SELECT armazenamento_usado 
+    FROM vw_servidor;
 -- USO CPU
-SELECT uso_cpu FROM vw_cpu
-WHERE uso_cpu IS NOT NULL;
-
+CREATE OR REPLACE VIEW vw_espec_cpu AS
+	SELECT uso_cpu 
+    FROM vw_cpu
+	WHERE uso_cpu IS NOT NULL;
 -- USO RAM
-SELECT Uso FROM vw_ram 
-WHERE Uso IS NOT NULL;
+CREATE OR REPLACE VIEW vw_espec_ram AS
+	SELECT Uso AS uso_ram
+    FROM vw_ram 
+	WHERE Uso IS NOT NULL;
 
-SELECT * FROM vw_media_pacotes_semana;
+-- VIEW KPI's GERAL
+CREATE OR REPLACE VIEW vw_kpi_geral AS
+SELECT 
+    total_uptime,
+    total_banda,
+    total_pacotes_enviados,
+    total_espaco_uso,
+    total_media_cpu,
+    total_media_ram,
+    data_hora
+FROM vw_total_uptime
+JOIN vw_total_banda ON 1=1
+JOIN vw_total_pacotes_enviados ON 1=1
+JOIN vw_total_espaco_uso ON 1=1
+JOIN vw_total_media_cpu ON 1=1
+JOIN vw_total_media_ram ON 1=1
+JOIN tb_registro ON DATE(data_hora) = CURDATE()
+ORDER BY data_hora;
+
+SELECT * FROM vw_kpi_geral;
+
+
+-- VIEW KPI's ESPEC
+
+CREATE OR REPLACE VIEW vw_kpi_espec AS
+SELECT
+	vu.uptime,
+    vt.taxa_transferencia,
+    vp.pacotes_enviados,
+    ve.armazenamento_usado,
+    vc.uso_cpu,
+    vr.uso_ram,
+    reg.fk_servidor,
+    reg.data_hora
+FROM vw_espec_uptime AS vu
+JOIN vw_espec_transferencia AS vt ON 1=1
+JOIN vw_espec_pacotes AS vp ON 1=1
+JOIN vw_espec_espaco_uso AS ve ON 1=1
+JOIN vw_espec_cpu AS vc ON 1=1
+JOIN vw_espec_ram AS vr ON 1=1
+JOIN tb_registro AS reg ON DATE(data_hora) = CURDATE()
+ORDER BY reg.data_hora, reg.fk_servidor;
+    
+SELECT * FROM vw_kpi_espec;
