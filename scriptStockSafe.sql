@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS StockSafe;
-USE StockSafe ;
+USE StockSafe;
 
 -- drop database StockSafe;
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
-  pacotes_enviados TINYINT NULL,
+  pacotes_enviados INT NULL,
   uso_cpu TINYINT NULL,
   uso_ram TINYINT NULL,
   taxa_transferencia TINYINT NULL,
@@ -221,12 +221,17 @@ AS SELECT
 	FROM tb_servidor GROUP BY id_servidor, (armazenamento_usado/armazenamento_total) * 100;
     
 SELECT * FROM vw_armz_usado;
+SELECT * FROM tb_registro;
 
 -- MÉDIA DE PACOTES RECEBIDOS NA SEMANA
 CREATE OR REPLACE VIEW vw_media_pacotes_semana AS
-	SELECT fk_servidor,round(AVG(pacotes_enviados)) FROM tb_registro 
+	SELECT fk_servidor,
+    round(AVG(pacotes_enviados)) AS media_pacotes_enviados
+    FROM tb_registro
 		WHERE (pacotes_enviados IS NOT NULL) AND (data_hora > date_sub(curdate(), INTERVAL 7 DAY))
 		GROUP BY fk_servidor;
+
+SELECT * FROM vw_media_pacotes_semana;
 
 -- VIEW DOS SERVIDORES
 CREATE VIEW vw_servidor AS
@@ -265,14 +270,24 @@ FROM vw_banda_larga AS bdl;
  
 -- PACOTES ENVIADOS
 
+
 -- ESPAÇO USADO (DISCO) GERAL
-SELECT ROUND(AVG(arm.armazenamento_usado)) AS media_uso_armazenamento
-FROM vw_armz_usado AS arm;
+SELECT SUM(serv.armazenamento_total) AS total_armazenamento, 
+SUM(serv.armazenamento_usado) AS uso_armazenamento,
+ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS percentual_uso
+FROM vw_servidor AS serv;
 
 -- MÉDIA DE USO CPU
+SELECT ROUND(AVG(vw_cpu.uso_cpu)) as media_uso_cpu,
+reg.data_hora
+FROM vw_cpu
+JOIN tb_registro AS reg
+ON HOUR(reg.data_hora) = HOUR(NOW())
+GROUP BY reg.data_hora;
 
 -- MÉDEIA DE USO RAM
-
+SELECT ROUND(AVG(vw_cpu.uso_cpu)) as media_uso_cpu
+FROM vw_cpu;
 
 -- UPTIME
 -- TAXA DE TRANSFERÊNCIA
