@@ -146,9 +146,10 @@ INSERT INTO tb_opcao VALUES
 (NULL, 100, 2000.89, 60000, 2001);
 
 -- SESSÃO DAS VIEWS
+SELECT * FROM tb_registro;
 
 -- CPU
-CREATE VIEW vw_cpu AS
+CREATE OR REPLACE VIEW vw_cpu AS
 	SELECT fk_servidor, uso_cpu FROM tb_registro
 		WHERE uso_cpu IS NOT NULL;
 
@@ -209,7 +210,7 @@ SELECT * FROM vw_banda_larga;
 
 -- UPTIME
 CREATE OR REPLACE VIEW vw_uptime AS
-	SELECT DATE(data_hora) as dia, fk_servidor, round(((COUNT(data_hora)/4)*100)/9) as uptime
+	SELECT DATE(data_hora) as dia, fk_servidor, round(((COUNT(data_hora)/4)*100)/5) as uptime
 		FROM tb_registro
 		GROUP BY fk_servidor, DATE(data_hora);
         
@@ -248,60 +249,55 @@ CREATE VIEW vw_servidor AS
             
 SELECT * FROM vw_servidor;
 
--- KPI's
+-- ============ KPI's
 -- UPTIME GERAL
--- Por data:
-SELECT ROUND(AVG(up.uptime)) AS 'Média de uptime', 
-reg.data_hora
+SELECT ROUND(AVG(up.uptime)) AS total_uptime
 FROM vw_uptime AS up
 JOIN tb_registro AS reg ON
 DATE(reg.data_hora) = CURDATE()
 GROUP BY reg.data_hora;
 
--- Por hora
-SELECT ROUND(AVG(up.uptime)) AS media_uptime, 
-reg.data_hora
-FROM vw_uptime AS up
-JOIN tb_registro AS reg ON
-HOUR(reg.data_hora) = HOUR(NOW())
-GROUP BY reg.data_hora;
-
--- USO BANDA LARGA
+-- USO BANDA LARGA GERAL
 SELECT SUM(bdl.Banda) AS total_banda
 FROM vw_banda_larga AS bdl;
  
--- PACOTES ENVIADOS
-
+-- PACOTES ENVIADOS GERAL
+SELECT SUM(pacotes_enviados) AS total_pacotes_enviados
+FROM tb_registro;
 
 -- ESPAÇO USADO (DISCO) GERAL
-SELECT SUM(serv.armazenamento_total) AS total_armazenamento, 
-SUM(serv.armazenamento_usado) AS uso_armazenamento,
-ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS percentual_uso
+SELECT ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS total_espaco_uso
 FROM vw_servidor AS serv;
 
 -- MÉDIA DE USO CPU
-SELECT ROUND(AVG(vw_cpu.uso_cpu)) as media_uso_cpu,
-reg.data_hora
-FROM vw_cpu
-JOIN tb_registro AS reg
-ON HOUR(reg.data_hora) = HOUR(NOW())
-GROUP BY reg.data_hora;
+SELECT ROUND(AVG(vw_cpu.uso_cpu)) as total_media_cpu
+FROM vw_cpu;
 
--- MÉDEIA DE USO RAM
-SELECT ROUND(AVG(vw_ram.uso_cpu)) as media_uso_cpu,
-reg.data_hora
-FROM vw_cpu
-JOIN tb_registro AS reg
-ON HOUR(reg.data_hora) = HOUR(NOW())
-GROUP BY reg.data_hora;
+-- MÉDIA DE USO RAM
+SELECT ROUND(AVG(vw_ram.Uso)) as total_media_ram
+FROM vw_ram;
 
--- UPTIME
--- TAXA DE TRANSFERÊNCIA
--- PACOTES ENVIADOS
+
+-- UPTIME ESPECIFICO
+SELECT uptime FROM vw_uptime;
+
+-- TAXA DE TRANSFERÊNCIA ESPECIFICO
+SELECT taxa_transferencia FROM tb_registro 
+WHERE taxa_transferencia IS NOT NULL;
+
+-- PACOTES ENVIADOS ESPECIFICO
+SELECT SUM(pacotes_enviados) FROM tb_registro
+WHERE pacotes_enviados IS NOT NULL;
+
 -- ESPAÇO USADO (DISCO) ESPECIFICO
 SELECT armazenamento_usado FROM vw_servidor;
+
 -- USO CPU
+SELECT uso_cpu FROM vw_cpu
+WHERE uso_cpu IS NOT NULL;
+
 -- USO RAM
-SELECT Uso FROM vw_ram WHERE Uso IS NOT NULL;
+SELECT Uso FROM vw_ram 
+WHERE Uso IS NOT NULL;
 
 SELECT * FROM vw_media_pacotes_semana;
