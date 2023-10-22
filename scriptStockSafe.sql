@@ -78,60 +78,56 @@ INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_au
         ('SRV019', 150.1, 75.0, 1),
 		('SRV020', 400.4, 200.2, 1);
 
-INSERT INTO tb_categoria (nome, unidade_medida) VALUES ('RAM', '%'),
-														('Taxa de Transferência', 'Gb/s'),
-														('CPU', '%');
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram) VALUES 
+		(2001, NOW(), 30),
+		(2001, NOW(), 25),
+        (2001, NOW(), 20),
+        (2001, NOW(), 28),
+        (2001, NOW(), 22),
+        (2002, NOW(), 26),
+        (2002, NOW(), 24),
+        (2002, NOW(), 20),
+        (2002, NOW(), 32),
+        (2002, NOW(), 22),
+        (2003, NOW(), 28),
+        (2003, NOW(), 25),
+        (2003, NOW(), 20),
+        (2003, NOW(), 26),
+		(2003, NOW(), 28);
 
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram, fk_categoria) VALUES 
-		(2001, NOW(), 30, 1),
-		(2001, NOW(), 25, 1),
-        (2001, NOW(), 20, 1),
-        (2001, NOW(), 28, 1),
-        (2001, NOW(), 22, 1),
-        (2002, NOW(), 26, 1),
-        (2002, NOW(), 24, 1),
-        (2002, NOW(), 20, 1),
-        (2002, NOW(), 32, 1),
-        (2002, NOW(), 22, 1),
-        (2003, NOW(), 28, 1),
-        (2003, NOW(), 25, 1),
-        (2003, NOW(), 20, 1),
-        (2003, NOW(), 26, 1),
-		(2003, NOW(), 28, 1);
-
-INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia, fk_categoria) VALUES 
-		(2001, NOW(), 100, 2),
-		(2001, NOW(), 80, 2),
-        (2001, NOW(), 60, 2),
-        (2001, NOW(), 90, 2),
-        (2001, NOW(), 70, 2),
-        (2002, NOW(), 85, 2),
-        (2002, NOW(), 75, 2),
-        (2002, NOW(), 60, 2),
-        (2002, NOW(), 105, 2),
-        (2002, NOW(), 70, 2),
-        (2003, NOW(), 90, 2),
-        (2003, NOW(), 80, 2),
-        (2003, NOW(), 60, 2),
-        (2003, NOW(), 85, 2),
-		(2003, NOW(), 90, 2);
+INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia) VALUES 
+		(2001, NOW(), 100),
+		(2001, NOW(), 80),
+        (2001, NOW(), 60),
+        (2001, NOW(), 90),
+        (2001, NOW(), 70),
+        (2002, NOW(), 85),
+        (2002, NOW(), 75),
+        (2002, NOW(), 60),
+        (2002, NOW(), 105),
+        (2002, NOW(), 70),
+        (2003, NOW(), 90),
+        (2003, NOW(), 80),
+        (2003, NOW(), 60),
+        (2003, NOW(), 85),
+		(2003, NOW(), 90);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu, fk_categoria) VALUES 
-		(2001, NOW(), 10, 3),
-		(2001, NOW(), 15, 3),
-        (2001, NOW(), 12, 3),
-        (2001, NOW(), 17, 3),
-        (2001, NOW(), 20, 3),
-        (2002, NOW(), 23, 3),
-        (2002, NOW(), 20, 3),
-        (2002, NOW(), 19, 3),
-        (2002, NOW(), 15, 3),
-        (2002, NOW(), 20, 3),
-        (2003, NOW(), 21, 3),
-        (2003, NOW(), 18, 3),
-        (2003, NOW(), 17, 3),
-        (2003, NOW(), 15, 3),
-		(2003, NOW(), 14, 3);
+INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu) VALUES 
+		(2001, NOW(), 10),
+		(2001, NOW(), 15),
+        (2001, NOW(), 12),
+        (2001, NOW(), 17),
+        (2001, NOW(), 20),
+        (2002, NOW(), 23),
+        (2002, NOW(), 20),
+        (2002, NOW(), 19),
+        (2002, NOW(), 15),
+        (2002, NOW(), 20),
+        (2003, NOW(), 21),
+        (2003, NOW(), 18),
+        (2003, NOW(), 17),
+        (2003, NOW(), 15),
+		(2003, NOW(), 14);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 2000.89, 60000, 2001);
