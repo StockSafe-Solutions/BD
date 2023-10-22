@@ -319,27 +319,3 @@ JOIN tb_registro ON DATE(data_hora) = CURDATE()
 ORDER BY data_hora;
 
 SELECT * FROM vw_kpi_geral;
-
-
--- VIEW KPI's ESPEC
-
-CREATE OR REPLACE VIEW vw_kpi_espec AS
-SELECT
-	vu.uptime,
-    vt.taxa_transferencia,
-    vp.pacotes_enviados,
-    ve.armazenamento_usado,
-    vc.uso_cpu,
-    vr.uso_ram,
-    reg.fk_servidor,
-    reg.data_hora
-FROM vw_espec_uptime AS vu
-JOIN vw_espec_transferencia AS vt ON 1=1
-JOIN vw_espec_pacotes AS vp ON 1=1
-JOIN vw_espec_espaco_uso AS ve ON 1=1
-JOIN vw_espec_cpu AS vc ON 1=1
-JOIN vw_espec_ram AS vr ON 1=1
-JOIN tb_registro AS reg ON DATE(data_hora) = CURDATE()
-ORDER BY reg.data_hora, reg.fk_servidor;
-    
-SELECT * FROM vw_kpi_espec;
