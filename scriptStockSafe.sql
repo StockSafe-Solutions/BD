@@ -78,56 +78,56 @@ INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_au
         ('SRV019', 150.1, 75.0, 1),
 		('SRV020', 400.4, 200.2, 1);
 
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_ram) VALUES 
-		(2001, NOW(), 30),
-		(2001, NOW(), 25),
-        (2001, NOW(), 20),
-        (2001, NOW(), 28),
-        (2001, NOW(), 22),
-        (2002, NOW(), 26),
-        (2002, NOW(), 24),
-        (2002, NOW(), 20),
-        (2002, NOW(), 32),
-        (2002, NOW(), 22),
-        (2003, NOW(), 28),
-        (2003, NOW(), 25),
-        (2003, NOW(), 20),
-        (2003, NOW(), 26),
-		(2003, NOW(), 28);
+INSERT INTO tb_registro (fk_servidor, uso_ram) VALUES 
+		(2001, 30),
+		(2001, 25),
+        (2001, 20),
+        (2001, 28),
+        (2001, 22),
+        (2002, 26),
+        (2002, 24),
+        (2002, 20),
+        (2002, 32),
+        (2002, 22),
+        (2003, 28),
+        (2003, 25),
+        (2003, 20),
+        (2003, 26),
+		(2003, 28);
 
-INSERT INTO tb_registro (fk_servidor, data_hora, taxa_transferencia) VALUES 
-		(2001, NOW(), 100),
-		(2001, NOW(), 80),
-        (2001, NOW(), 60),
-        (2001, NOW(), 90),
-        (2001, NOW(), 70),
-        (2002, NOW(), 85),
-        (2002, NOW(), 75),
-        (2002, NOW(), 60),
-        (2002, NOW(), 105),
-        (2002, NOW(), 70),
-        (2003, NOW(), 90),
-        (2003, NOW(), 80),
-        (2003, NOW(), 60),
-        (2003, NOW(), 85),
-		(2003, NOW(), 90);
+INSERT INTO tb_registro (fk_servidor, taxa_transferencia) VALUES 
+		(2001, 100),
+		(2001, 80),
+        (2001, 60),
+        (2001, 90),
+        (2001, 70),
+        (2002, 85),
+        (2002, 75),
+        (2002, 60),
+        (2002, 105),
+        (2002, 70),
+        (2003, 90),
+        (2003, 80),
+        (2003, 60),
+        (2003, 85),
+		(2003, 90);
         
-INSERT INTO tb_registro (fk_servidor, data_hora, uso_cpu) VALUES 
-		(2001, NOW(), 10),
-		(2001, NOW(), 15),
-        (2001, NOW(), 12),
-        (2001, NOW(), 17),
-        (2001, NOW(), 20),
-        (2002, NOW(), 23),
-        (2002, NOW(), 20),
-        (2002, NOW(), 19),
-        (2002, NOW(), 15),
-        (2002, NOW(), 20),
-        (2003, NOW(), 21),
-        (2003, NOW(), 18),
-        (2003, NOW(), 17),
-        (2003, NOW(), 15),
-		(2003, NOW(), 14);
+INSERT INTO tb_registro (fk_servidor, uso_cpu) VALUES 
+		(2001, 10),
+		(2001, 15),
+        (2001, 12),
+        (2001, 17),
+        (2001, 20),
+        (2002, 23),
+        (2002, 20),
+        (2002, 19),
+        (2002, 15),
+        (2002, 20),
+        (2003, 21),
+        (2003, 18),
+        (2003, 17),
+        (2003, 15),
+		(2003, 14);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 2000.89, 60000, 2001);
@@ -146,7 +146,6 @@ SELECT * FROM vw_cpu;
 CREATE OR REPLACE VIEW vw_ram AS SELECT 
 	r.id_registro as 'Registro',
     r.fk_servidor as 'Servidor',
-    r.fk_categoria as 'Categoria',
     r.uso_ram as 'Uso', 
     r.data_hora as 'Data/Hora'
 FROM tb_registro AS r
@@ -160,11 +159,9 @@ CREATE OR REPLACE VIEW vw_taxa_transferencia AS
 	SELECT 
 		r.id_registro as 'Registro',
 		r.fk_servidor as 'Servidor',
-		r.fk_categoria as 'Categoria',
 		r.taxa_transferencia as 'Taxa de Transferência', 
 		r.data_hora as 'Data/Hora'
 	FROM tb_registro AS r
-	WHERE r.fk_categoria = 2
 	GROUP BY data_hora, fk_servidor, id_registro
 	ORDER BY data_hora DESC; 
     
