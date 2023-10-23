@@ -153,7 +153,7 @@ SELECT * FROM vw_pacotes_enviados;
 DROP PROCEDURE IF EXISTS sp_kpi_especifica;	
 
 DELIMITER //
-CREATE PROCEDURE sp_kpi_especifica(IN taxa_atualizacao INT)
+CREATE PROCEDURE sp_kpi_especifica(IN taxa_atualizacao INT, IN pCodigo CHAR(6))
 BEGIN
 	CREATE TEMPORARY TABLE IF NOT EXISTS quantidade_registros (
 		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
@@ -161,6 +161,7 @@ BEGIN
     
 	SELECT
 		id_servidor,
+        codigo,
 		avg((qr.qtd_registros * 100) / (9 / taxa_atualizacao)) as uptime,
 		avg(taxt.taxa_transferencia) AS kpi_taxa,
 		avg(opt.taxa_transferencia) AS base_taxa,
@@ -172,11 +173,12 @@ BEGIN
 			JOIN tb_opcao AS opt
 			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
             JOIN quantidade_registros AS qr ON qr.fk_servidor = id_servidor
-			GROUP BY id_servidor, DAY(pct.data_hora);
+            WHERE codigo = pCodigo
+			GROUP BY id_servidor, codigo, DAY(pct.data_hora);
 END //
 DELIMITER ;
 
-CALL sp_kpi_especifica(1);
+CALL sp_kpi_especifica(1,'SVJW32');
 
 -- USO DE BANDA LARGA TOTAL
 
