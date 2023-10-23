@@ -120,7 +120,7 @@ SELECT * FROM vw_cpu_geral;
 CREATE OR REPLACE VIEW vw_ram AS
 	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') as dataDados
     FROM tb_registro
-	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d') as dataDados, fk_servidor;
+	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d'), fk_servidor;
 
 SELECT * FROM vw_ram;
 
