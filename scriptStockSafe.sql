@@ -1,7 +1,11 @@
 CREATE DATABASE IF NOT EXISTS StockSafe;
 USE StockSafe;
 
--- drop database StockSafe;
+-- DROP DATABASE StockSafe;
+
+-- CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
+-- GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+-- FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL AUTO_INCREMENT,
@@ -45,9 +49,6 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   PRIMARY KEY (id_opcao)
   );
   
-CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
-GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
-FLUSH PRIVILEGES;
 
 -- LISTA DE INSERTS
   
