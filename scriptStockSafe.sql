@@ -133,10 +133,10 @@ SELECT * FROM vw_ram_geral;
 
 -- -------------------------------------------------------------------- KPI
 -- UPTIME
-DROP PROCEDURE IF EXISTS sp_calcular_uptime;
+DROP PROCEDURE IF EXISTS sp_kpi_especifica;	
 
 DELIMITER //
-CREATE PROCEDURE sp_calcular_uptime(IN taxa_atualizacao INT)
+CREATE PROCEDURE sp_kpi_especifica(IN taxa_atualizacao INT)
 BEGIN
 	CREATE TEMPORARY TABLE IF NOT EXISTS quantidade_registros (
 		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
@@ -159,7 +159,7 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL sp_calcular_uptime(1);
+CALL sp_kpi_especifica(1);
 
 -- Taxa de Transferencia
 CREATE OR REPLACE VIEW vw_taxa_transferencia AS
