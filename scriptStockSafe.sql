@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   fk_servidor INT NOT NULL,
   data_hora DATETIME NOT NULL DEFAULT now(),
   pacotes_enviados INT NULL,
-  uso_cpu TINYINT NULL,
-  uso_ram TINYINT NULL,
-  taxa_transferencia TINYINT NULL,
+  uso_cpu DOUBLE(5,2) NULL,
+  uso_ram DOUBLE(5,2) NULL,
+  taxa_transferencia DOUBLE(6,2) NULL,
   PRIMARY KEY (id_registro, fk_servidor),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor)
     );
@@ -64,23 +64,23 @@ INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_au
         ('17P51N', 600.6, 300.3, 1);
 
 INSERT INTO tb_registro VALUES 
-		(null, SVJW32, '2023-10-23 10:00:00', 204, 23, 34, 499),
-		(null, SVJW32, '2023-10-23 12:00:00', 84, 5, 21, 487),
-        (null, SVJW32, '2023-10-23 14:00:00', 402, 67, 58, 439),
-        (null, SVJW32, '2023-10-23 16:00:00', 694, 72, 85, 402),
-        (null, SVJW32, '2023-10-23 18:00:00', 960, 86, 94, 414),
+		(null, 2000, '2023-10-23 10:00:00', 204, 23, 34, 499),
+		(null, 2000, '2023-10-23 12:00:00', 84, 5, 21, 487),
+        (null, 2000, '2023-10-23 14:00:00', 402, 67, 58, 439),
+        (null, 2000, '2023-10-23 16:00:00', 694, 72, 85, 402),
+        (null, 2000, '2023-10-23 18:00:00', 960, 86, 94, 414),
 
-        (null, B7WGPJ, '2023-10-23 10:00:00', 309, 45, 42, 497),
-        (null, B7WGPJ, '2023-10-23 12:00:00', 102, 18, 21, 498),
-        (null, B7WGPJ, '2023-10-23 14:00:00', 492, 56, 48, 427),
-        (null, B7WGPJ, '2023-10-23 16:00:00', 853, 89, 78, 414),
-        (null, B7WGPJ, '2023-10-23 18:00:00', 940, 94, 87, 423),
+        (null, 2001, '2023-10-23 10:00:00', 309, 45, 42, 497),
+        (null, 2001, '2023-10-23 12:00:00', 102, 18, 21, 498),
+        (null, 2001, '2023-10-23 14:00:00', 492, 56, 48, 427),
+        (null, 2001, '2023-10-23 16:00:00', 853, 89, 78, 414),
+        (null, 2001, '2023-10-23 18:00:00', 940, 94, 87, 423),
 
-        (null, TCUHVQ, '2023-10-23 10:00:00', 294, 28, 39, 498),
-        (null, TCUHVQ, '2023-10-23 12:00:00', 183, 14, 19, 499),
-        (null, TCUHVQ, '2023-10-23 14:00:00', 593, 59, 78, 464),
-        (null, TCUHVQ, '2023-10-23 16:00:00', 869, 85, 89, 421),
-		(null, TCUHVQ, '2023-10-23 18:00:00', 956, 95, 93, 413);
+        (null, 2002, '2023-10-23 10:00:00', 294, 28, 39, 498),
+        (null, 2002, '2023-10-23 12:00:00', 183, 14, 19, 499),
+        (null, 2002, '2023-10-23 14:00:00', 593, 59, 78, 464),
+        (null, 2002, '2023-10-23 16:00:00', 869, 85, 89, 421),
+		(null, 2002, '2023-10-23 18:00:00', 956, 95, 93, 413);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 500, 60000);
