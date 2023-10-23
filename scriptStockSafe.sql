@@ -83,7 +83,7 @@ INSERT INTO tb_registro VALUES
 		(null, 2002, '2023-10-23 18:00:00', 956, 95, 93, 413);
         
 INSERT INTO tb_opcao VALUES
-(NULL, 100, 500, 60000);
+(NULL, 100, 500, 30000);
 
 -- SESSÃO DAS VIEWS
 SELECT * FROM tb_registro;
@@ -104,26 +104,26 @@ SELECT * FROM vw_servidor;
 -- -------------------------------------------------------------------- Gráficos
 -- CPU
 CREATE OR REPLACE VIEW vw_cpu AS
-	SELECT fk_servidor, avg(uso_cpu), data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_cpu) as uso_cpu, data_hora FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_cpu;
 
 CREATE OR REPLACE VIEW vw_cpu_geral AS
-	SELECT fk_servidor, avg(uso_cpu), data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_cpu) as uso_cpu, data_hora FROM tb_registro
 		GROUP BY DATE_FORMAT(data_hora, '%d');
 
 SELECT * FROM vw_cpu_geral;
 
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_ram), data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_ram) as uso_ram, data_hora FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_ram;
 
 CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT fk_servidor, avg(uso_ram), data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_ram) as uso_ram, data_hora FROM tb_registro
 		GROUP BY DATE_FORMAT(data_hora, '%d');
 
 SELECT * FROM vw_ram_geral;
@@ -134,7 +134,7 @@ SELECT * FROM vw_ram_geral;
 -- -------------------------------------------------------------------- KPI
 -- Taxa de Transferencia
 CREATE OR REPLACE VIEW vw_taxa_transferencia AS
-	SELECT fk_servidor, taxa_transferencia, data_hora FROM tb_registro
+	SELECT fk_servidor, avg(taxa_transferencia) as taxa_transferencia, data_hora FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_taxa_transferencia;
@@ -143,7 +143,7 @@ SELECT * FROM vw_taxa_transferencia;
 CREATE OR REPLACE VIEW vw_pacotes_enviados 
 	AS SELECT
     fk_servidor,
-    pacotes_enviados,
+    avg(pacotes_enviados) as 'pacotes_enviados',
     data_hora
     FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
@@ -161,12 +161,12 @@ BEGIN
     
 	SELECT
 		id_servidor,
-		(qr.qtd_registros * 100) / (9 / taxa_atualizacao) as uptime,
+		avg((qr.qtd_registros * 100) / (9 / taxa_atualizacao)) as uptime,
 		avg(taxt.taxa_transferencia) AS kpi_taxa,
-		opt.taxa_transferencia AS base_taxa,
+		avg(opt.taxa_transferencia) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
-		armazenamento_total,
-		(armazenamento_usado * 100) / armazenamento_total AS kpi_armazenamento_usado
+		avg(armazenamento_total),
+		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento_usado
 		FROM tb_servidor
 			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
 			JOIN tb_opcao AS opt
