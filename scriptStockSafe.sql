@@ -88,91 +88,6 @@ INSERT INTO tb_opcao VALUES
 -- SESSÃO DAS VIEWS
 SELECT * FROM tb_registro;
 
--- CPU
-CREATE OR REPLACE VIEW vw_cpu AS
-	SELECT fk_servidor, uso_cpu FROM tb_registro
-		WHERE uso_cpu IS NOT NULL;
-
-SELECT * FROM vw_cpu;
-
--- RAM        
-CREATE OR REPLACE VIEW vw_ram AS SELECT 
-	r.id_registro as 'Registro',
-    r.fk_servidor as 'Servidor',
-    r.uso_ram as 'Uso', 
-    r.data_hora as 'Data/Hora'
-FROM tb_registro AS r
-GROUP BY data_hora, fk_servidor, id_registro
-ORDER BY data_hora DESC;
-
-SELECT * FROM vw_ram;
-
--- Taxa de Transferencia
-CREATE OR REPLACE VIEW vw_taxa_transferencia AS
-	SELECT 
-		r.id_registro as 'Registro',
-		r.fk_servidor as 'Servidor',
-		r.taxa_transferencia as 'Taxa de Transferência', 
-		r.data_hora as 'Data/Hora'
-	FROM tb_registro AS r
-	GROUP BY data_hora, fk_servidor, id_registro
-	ORDER BY data_hora DESC; 
-    
-SELECT * FROM vw_taxa_transferencia;  
-
--- USO DE BANDA LARGA TOTAL
-
-DELIMITER //
-CREATE PROCEDURE sp_uso_banda_larga()
-BEGIN
-    DECLARE limite INT;
-
-    SET limite = (select count(id_servidor) from tb_servidor);
-    
-    SELECT round(sum(`Taxa de Transferência`), 2) as 'Uso da banda larga total' from vw_taxa_transferencia LIMIT limite;
-END //
-DELIMITER ;
-
-call sp_uso_banda_larga();
-
--- OCUPAÇÃO DE BANDA LARGA POR SERVIDOR   
-CREATE OR REPLACE VIEW vw_banda_larga
-AS SELECT
-	id_opcao as Id,
-    fk_servidor as Servidor,
-    banda_larga as Banda
-FROM tb_opcao GROUP BY Id, Servidor, Banda;
-
-SELECT * FROM vw_banda_larga;
-
--- UPTIME
-CREATE OR REPLACE VIEW vw_uptime AS
-	SELECT DATE(data_hora) as dia, fk_servidor, round(((COUNT(data_hora)/4)*100)/5) as uptime
-		FROM tb_registro
-		GROUP BY fk_servidor, DATE(data_hora);
-        
-SELECT * FROM vw_uptime;
-        
--- ARMAZENAMENTO USADO
-CREATE OR REPLACE VIEW vw_armz_usado
-AS SELECT 
-	id_servidor AS Servidor,
-    (armazenamento_usado/armazenamento_total) * 100 AS armazenamento_usado
-	FROM tb_servidor GROUP BY id_servidor, (armazenamento_usado/armazenamento_total) * 100;
-    
-SELECT * FROM vw_armz_usado;
-SELECT * FROM tb_registro;
-
--- MÉDIA DE PACOTES RECEBIDOS NA SEMANA
-CREATE OR REPLACE VIEW vw_media_pacotes_semana AS
-	SELECT fk_servidor,
-    round(AVG(pacotes_enviados)) AS media_pacotes_enviados
-    FROM tb_registro
-		WHERE (pacotes_enviados IS NOT NULL) AND (data_hora > date_sub(curdate(), INTERVAL 7 DAY))
-		GROUP BY fk_servidor;
-
-SELECT * FROM vw_media_pacotes_semana;
-
 -- VIEW DOS SERVIDORES
 CREATE VIEW vw_servidor AS
 	SELECT 
@@ -186,82 +101,110 @@ CREATE VIEW vw_servidor AS
             
 SELECT * FROM vw_servidor;
 
--- ============ KPI's
--- UPTIME GERAL
-CREATE OR REPLACE VIEW vw_total_uptime AS
-	SELECT ROUND(AVG(up.uptime)) AS total_uptime
-	FROM vw_uptime AS up
-	JOIN tb_registro AS reg ON
-	DATE(reg.data_hora) = CURDATE()
-	GROUP BY reg.data_hora;
--- USO BANDA LARGA GERAL
-CREATE OR REPLACE VIEW vw_total_banda AS
-	SELECT SUM(bdl.Banda) AS total_banda
-	FROM vw_banda_larga AS bdl;
--- PACOTES ENVIADOS GERAL
-CREATE OR REPLACE VIEW vw_total_pacotes_enviados AS
-	SELECT SUM(pacotes_enviados) AS total_pacotes_enviados
-	FROM tb_registro;
--- ESPAÇO USADO (DISCO) GERAL
-CREATE OR REPLACE VIEW vw_total_espaco_uso AS
-	SELECT ROUND((SUM(serv.armazenamento_usado) / SUM(serv.armazenamento_total)) * 100) AS total_espaco_uso
-	FROM vw_servidor AS serv;
--- MÉDIA DE USO CPU
-CREATE OR REPLACE VIEW vw_total_media_cpu AS
-	SELECT ROUND(AVG(vw_cpu.uso_cpu)) as total_media_cpu
-	FROM vw_cpu;
--- MÉDIA DE USO RAM
-CREATE OR REPLACE VIEW vw_total_media_ram AS
-	SELECT ROUND(AVG(vw_ram.Uso)) as total_media_ram
-	FROM vw_ram;
+-- -------------------------------------------------------------------- Gráficos
+-- CPU
+CREATE OR REPLACE VIEW vw_cpu AS
+	SELECT fk_servidor, uso_cpu, data_hora FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
+
+SELECT * FROM vw_cpu;
+
+CREATE OR REPLACE VIEW vw_cpu_geral AS
+	SELECT fk_servidor, avg(uso_cpu), data_hora FROM tb_registro
+		GROUP BY DATE_FORMAT(data_hora, '%d');
+
+SELECT * FROM vw_cpu_geral;
+
+-- RAM        
+CREATE OR REPLACE VIEW vw_ram AS
+	SELECT fk_servidor, uso_ram, data_hora FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
+
+SELECT * FROM vw_ram;
+
+CREATE OR REPLACE VIEW vw_ram_geral AS
+	SELECT fk_servidor, avg(uso_ram), data_hora FROM tb_registro
+		GROUP BY DATE_FORMAT(data_hora, '%d');
+
+SELECT * FROM vw_ram_geral;
+
+-- -------------------------------------------------------------------- //Gráficos
+
+
+-- -------------------------------------------------------------------- KPI
+-- UPTIME
+DROP PROCEDURE IF EXISTS sp_calcular_uptime;
+
+DELIMITER //
+CREATE PROCEDURE sp_calcular_uptime(IN taxa_atualizacao INT)
+BEGIN
+	CREATE TEMPORARY TABLE IF NOT EXISTS quantidade_registros (
+		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
+    );
     
+	SELECT
+		id_servidor,
+		(qr.qtd_registros * 100) / (9 / taxa_atualizacao) as uptime,
+		avg(taxt.taxa_transferencia) AS kpi_taxa,
+		opt.taxa_transferencia AS base_taxa,
+		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
+		armazenamento_total,
+		(armazenamento_usado * 100) / armazenamento_total AS kpi_armazenamento_usado
+		FROM tb_servidor
+			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
+			JOIN tb_opcao AS opt
+			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
+            JOIN quantidade_registros AS qr ON qr.fk_servidor = id_servidor
+			GROUP BY id_servidor, DAY(pct.data_hora);
+END //
+DELIMITER ;
 
--- UPTIME ESPECIFICO
-CREATE OR REPLACE VIEW vw_espec_uptime AS
-	SELECT uptime 
-    FROM vw_uptime;
--- TAXA DE TRANSFERÊNCIA ESPECIFICO
-CREATE OR REPLACE VIEW vw_espec_transferencia AS
-	SELECT taxa_transferencia 
-    FROM tb_registro 
-	WHERE taxa_transferencia IS NOT NULL;
--- PACOTES ENVIADOS ESPECIFICO
-CREATE OR REPLACE VIEW vw_espec_pacotes AS
-	SELECT SUM(pacotes_enviados) AS pacotes_enviados
-    FROM tb_registro
-	WHERE pacotes_enviados IS NOT NULL;
--- ESPAÇO USADO (DISCO) ESPECIFICO
-CREATE OR REPLACE VIEW vw_espec_espaco_uso AS
-	SELECT armazenamento_usado 
-    FROM vw_servidor;
--- USO CPU
-CREATE OR REPLACE VIEW vw_espec_cpu AS
-	SELECT uso_cpu 
-    FROM vw_cpu
-	WHERE uso_cpu IS NOT NULL;
--- USO RAM
-CREATE OR REPLACE VIEW vw_espec_ram AS
-	SELECT Uso AS uso_ram
-    FROM vw_ram 
-	WHERE Uso IS NOT NULL;
+CALL sp_calcular_uptime(1);
 
--- VIEW KPI's GERAL
-CREATE OR REPLACE VIEW vw_kpi_geral AS
-SELECT 
-    total_uptime,
-    total_banda,
-    total_pacotes_enviados,
-    total_espaco_uso,
-    total_media_cpu,
-    total_media_ram,
+-- Taxa de Transferencia
+CREATE OR REPLACE VIEW vw_taxa_transferencia AS
+	SELECT fk_servidor, taxa_transferencia, data_hora FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
+
+SELECT * FROM vw_taxa_transferencia;
+
+-- PACOTES ENVIADOS POR DATA/HORA
+CREATE OR REPLACE VIEW vw_pacotes_enviados 
+	AS SELECT
+    fk_servidor,
+    pacotes_enviados,
     data_hora
-FROM vw_total_uptime
-JOIN vw_total_banda ON 1=1
-JOIN vw_total_pacotes_enviados ON 1=1
-JOIN vw_total_espaco_uso ON 1=1
-JOIN vw_total_media_cpu ON 1=1
-JOIN vw_total_media_ram ON 1=1
-JOIN tb_registro ON DATE(data_hora) = CURDATE()
-ORDER BY data_hora;
+    FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
 
-SELECT * FROM vw_kpi_geral;
+SELECT * FROM vw_pacotes_enviados;
+-- KPI especifica
+CREATE OR REPLACE VIEW vw_kpi_especifica 
+	AS SELECT
+		
+
+SELECT * FROM vw_kpi_especifica;
+
+-- USO DE BANDA LARGA TOTAL
+
+DELIMITER //
+CREATE PROCEDURE sp_uso_banda_larga()
+BEGIN
+    DECLARE limite INT;
+
+    SET limite = (select count(id_servidor) from tb_servidor);
+    
+    SELECT round(sum(taxa_transferencia), 2) from vw_taxa_transferencia LIMIT limite;
+END //
+DELIMITER ;
+
+call sp_uso_banda_larga();
+
+-- ARMAZENAMENTO USADO
+-- CREATE OR REPLACE VIEW vw_kpi_especifica
+-- AS SELECT 
+-- 	id_servidor,
+--     (armazenamento_usado * 100) / armazenamento_total,
+--     upt.uptime
+--     
+--     from tb_servidor;
