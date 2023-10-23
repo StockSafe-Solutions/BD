@@ -166,8 +166,8 @@ BEGIN
 		avg(taxt.taxa_transferencia) AS kpi_taxa,
 		avg(opt.taxa_transferencia) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
-		avg(armazenamento_total),
-		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento_usado
+		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento,
+		avg(armazenamento_total) AS base_armazenamento
 		FROM tb_servidor
 			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
 			JOIN tb_opcao AS opt
