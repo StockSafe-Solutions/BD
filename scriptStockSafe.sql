@@ -42,14 +42,12 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   banda_larga SMALLINT DEFAULT(155),
   taxa_transferencia DECIMAL(10,2) DEFAULT(1000.00),
   intervalo_atualizacao INT DEFAULT(60000),
-  fk_servidor INT NOT NULL,
-  PRIMARY KEY (id_opcao, fk_servidor),
-  FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor)
+  PRIMARY KEY (id_opcao)
   );
   
--- CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
--- GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
--- FLUSH PRIVILEGES;
+CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
+GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+FLUSH PRIVILEGES;
 
 -- LISTA DE INSERTS
   
@@ -57,80 +55,34 @@ INSERT INTO tb_funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 
 INSERT INTO tb_funcionario VALUES (2,'Gustavo','Designer','2005-06-13',null,'gustavo@gmail.com','urubu100');
 
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
-		('SRV001', 500.5, 250.2, 1),
-		('SRV002', 750.0, 375.5, 1),
-        ('SRV003', 300.3, 150.1, 1),
-        ('SRV004', 900.0, 500.0, 1),
-        ('SRV005', 800.8, 400.4, 1),
-        ('SRV006', 600.6, 300.3, 1),
-        ('SRV007', 900.9, 450.4, 1),
-        ('SRV008', 400.4, 200.2, 1),
-        ('SRV009', 700.7, 350.3, 1),
-        ('SRV010', 980.0, 600.0, 1),
-        ('SRV011', 450.4, 225.2, 1),
-        ('SRV012', 850.8, 425.4, 1),
-        ('SRV013', 250.2, 125.1, 1),
-        ('SRV014', 950.9, 475.5, 1),
-        ('SRV015', 550.5, 275.2, 1),
-        ('SRV016', 950.0, 550.0, 1),
-        ('SRV017', 350.3, 175.1, 1),
-        ('SRV018', 650.6, 325.3, 1),
-        ('SRV019', 150.1, 75.0, 1),
-		('SRV020', 400.4, 200.2, 1);
+		('SVJW32', 500.5, 250.2, 1),
+		('B7WGPJ', 750.0, 375.5, 1),
+        ('RQ8Q28', 300.3, 150.1, 1),
+        ('Y5WR5Y', 900.0, 500.0, 1),
+        ('TCUHVQ', 800.8, 400.4, 1),
+        ('17P51N', 600.6, 300.3, 1);
 
-INSERT INTO tb_registro (fk_servidor, uso_ram) VALUES 
-		(2001, 30),
-		(2001, 25),
-        (2001, 20),
-        (2001, 28),
-        (2001, 22),
-        (2002, 26),
-        (2002, 24),
-        (2002, 20),
-        (2002, 32),
-        (2002, 22),
-        (2003, 28),
-        (2003, 25),
-        (2003, 20),
-        (2003, 26),
-		(2003, 28);
+INSERT INTO tb_registro VALUES 
+		(null, SVJW32, '2023-10-23 10:00:00', 204, 23, 34, 499),
+		(null, SVJW32, '2023-10-23 12:00:00', 84, 5, 21, 487),
+        (null, SVJW32, '2023-10-23 14:00:00', 402, 67, 58, 439),
+        (null, SVJW32, '2023-10-23 16:00:00', 694, 72, 85, 402),
+        (null, SVJW32, '2023-10-23 18:00:00', 960, 86, 94, 414),
 
-INSERT INTO tb_registro (fk_servidor, taxa_transferencia) VALUES 
-		(2001, 100),
-		(2001, 80),
-        (2001, 60),
-        (2001, 90),
-        (2001, 70),
-        (2002, 85),
-        (2002, 75),
-        (2002, 60),
-        (2002, 105),
-        (2002, 70),
-        (2003, 90),
-        (2003, 80),
-        (2003, 60),
-        (2003, 85),
-		(2003, 90);
-        
-INSERT INTO tb_registro (fk_servidor, uso_cpu) VALUES 
-		(2001, 10),
-		(2001, 15),
-        (2001, 12),
-        (2001, 17),
-        (2001, 20),
-        (2002, 23),
-        (2002, 20),
-        (2002, 19),
-        (2002, 15),
-        (2002, 20),
-        (2003, 21),
-        (2003, 18),
-        (2003, 17),
-        (2003, 15),
-		(2003, 14);
+        (null, B7WGPJ, '2023-10-23 10:00:00', 309, 45, 42, 497),
+        (null, B7WGPJ, '2023-10-23 12:00:00', 102, 18, 21, 498),
+        (null, B7WGPJ, '2023-10-23 14:00:00', 492, 56, 48, 427),
+        (null, B7WGPJ, '2023-10-23 16:00:00', 853, 89, 78, 414),
+        (null, B7WGPJ, '2023-10-23 18:00:00', 940, 94, 87, 423),
+
+        (null, TCUHVQ, '2023-10-23 10:00:00', 294, 28, 39, 498),
+        (null, TCUHVQ, '2023-10-23 12:00:00', 183, 14, 19, 499),
+        (null, TCUHVQ, '2023-10-23 14:00:00', 593, 59, 78, 464),
+        (null, TCUHVQ, '2023-10-23 16:00:00', 869, 85, 89, 421),
+		(null, TCUHVQ, '2023-10-23 18:00:00', 956, 95, 93, 413);
         
 INSERT INTO tb_opcao VALUES
-(NULL, 100, 2000.89, 60000, 2001);
+(NULL, 100, 500, 60000);
 
 -- SESSÃO DAS VIEWS
 SELECT * FROM tb_registro;
