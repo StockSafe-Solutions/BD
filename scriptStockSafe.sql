@@ -104,7 +104,7 @@ SELECT * FROM vw_servidor;
 -- -------------------------------------------------------------------- Gráficos
 -- CPU
 CREATE OR REPLACE VIEW vw_cpu AS
-	SELECT fk_servidor, uso_cpu, data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_cpu), data_hora FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_cpu;
@@ -117,7 +117,7 @@ SELECT * FROM vw_cpu_geral;
 
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, uso_ram, data_hora FROM tb_registro
+	SELECT fk_servidor, avg(uso_ram), data_hora FROM tb_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_ram;
@@ -132,7 +132,24 @@ SELECT * FROM vw_ram_geral;
 
 
 -- -------------------------------------------------------------------- KPI
--- UPTIME
+-- Taxa de Transferencia
+CREATE OR REPLACE VIEW vw_taxa_transferencia AS
+	SELECT fk_servidor, taxa_transferencia, data_hora FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
+
+SELECT * FROM vw_taxa_transferencia;
+
+-- PACOTES ENVIADOS POR DATA/HORA
+CREATE OR REPLACE VIEW vw_pacotes_enviados 
+	AS SELECT
+    fk_servidor,
+    pacotes_enviados,
+    data_hora
+    FROM tb_registro
+		GROUP BY data_hora, fk_servidor;
+
+SELECT * FROM vw_pacotes_enviados;
+
 DROP PROCEDURE IF EXISTS sp_kpi_especifica;	
 
 DELIMITER //
@@ -160,30 +177,6 @@ END //
 DELIMITER ;
 
 CALL sp_kpi_especifica(1);
-
--- Taxa de Transferencia
-CREATE OR REPLACE VIEW vw_taxa_transferencia AS
-	SELECT fk_servidor, taxa_transferencia, data_hora FROM tb_registro
-		GROUP BY data_hora, fk_servidor;
-
-SELECT * FROM vw_taxa_transferencia;
-
--- PACOTES ENVIADOS POR DATA/HORA
-CREATE OR REPLACE VIEW vw_pacotes_enviados 
-	AS SELECT
-    fk_servidor,
-    pacotes_enviados,
-    data_hora
-    FROM tb_registro
-		GROUP BY data_hora, fk_servidor;
-
-SELECT * FROM vw_pacotes_enviados;
--- KPI especifica
-CREATE OR REPLACE VIEW vw_kpi_especifica 
-	AS SELECT
-		
-
-SELECT * FROM vw_kpi_especifica;
 
 -- USO DE BANDA LARGA TOTAL
 
