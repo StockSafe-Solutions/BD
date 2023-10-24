@@ -3,9 +3,11 @@ USE StockSafe;
 
 -- DROP DATABASE StockSafe;
 
--- CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
--- GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
--- FLUSH PRIVILEGES;
+/*
+CREATE USER IF NOT EXISTS 'StockSafe'@'localhost' IDENTIFIED BY 'urubu100';
+GRANT ALL PRIVILEGES ON StockSafe.* TO 'StockSafe'@'localhost';
+FLUSH PRIVILEGES;
+*/
 
 CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL AUTO_INCREMENT,
@@ -23,8 +25,8 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   codigo CHAR(6) NOT NULL,
   armazenamento_total DECIMAL(4,1) NULL,
   armazenamento_usado DECIMAL(4,1) NULL,
-  id_autenticador INT NOT NULL,
-  PRIMARY KEY (id_servidor, id_autenticador),
+  id_autenticador INT,
+  PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
@@ -52,16 +54,19 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
 
 -- LISTA DE INSERTS
   
-INSERT INTO tb_funcionario VALUES (1, 'Danilo', 'Analista', '2005-07-11', null, 'danilo@gmal.com', 'urubu100');
-INSERT INTO tb_funcionario VALUES (2,'Gustavo','Designer','2005-06-13',null,'gustavo@gmail.com','urubu100');
+INSERT INTO tb_funcionario VALUES (1, 'Danilo Marques', 'Analista', '2005-07-11', null, 'danilo@b3.com', 'urubu100');
+INSERT INTO tb_funcionario VALUES (2,'Gustavo Pereira','Analista','2005-06-13',null,'gustavo@b3.com','urubu100');
+INSERT INTO tb_funcionario VALUES (3,'Gabriel Bazante','Gerente de infraestrutura','2005-06-13',null,'gabriel@b3.com','urubu100');
+INSERT INTO tb_funcionario VALUES (4,'Stephany Justino','Gerente de operações','2005-06-13',null,'stephany@b3.com','urubu100');
+INSERT INTO tb_funcionario VALUES (5,'Rafael Rocha','COO','2005-06-13',null,'rafael@b3.com','urubu100');
 
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
 		('SVJW32', 500.5, 250.2, 1),
 		('B7WGPJ', 750.0, 375.5, 1),
         ('RQ8Q28', 300.3, 150.1, 1),
-        ('Y5WR5Y', 900.0, 500.0, 1),
-        ('TCUHVQ', 800.8, 400.4, 1),
-        ('17P51N', 600.6, 300.3, 1);
+        ('Y5WR5Y', 900.0, 500.0, NULL),
+        ('TCUHVQ', 800.8, 400.4, NULL),
+        ('17P51N', 600.6, 300.3, NULL);
 
 INSERT INTO tb_registro VALUES 
 		(null, 2000, '2023-10-23 10:00:00', 204, 23, 34, 499),
@@ -118,15 +123,15 @@ SELECT * FROM vw_cpu_geral;
 
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') as dataDados
+	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') AS dataDados
     FROM tb_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d'), fk_servidor;
 
 SELECT * FROM vw_ram;
 
 CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT fk_servidor, avg(uso_ram) as uso_ram, data_hora FROM tb_registro
-		GROUP BY DATE_FORMAT(data_hora, '%d');
+	SELECT avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') AS dataDados FROM tb_registro
+		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d');
 
 SELECT * FROM vw_ram_geral;
 
