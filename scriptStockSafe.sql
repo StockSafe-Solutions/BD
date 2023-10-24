@@ -109,29 +109,30 @@ SELECT * FROM vw_servidor;
 -- -------------------------------------------------------------------- Gráficos
 -- CPU
 CREATE OR REPLACE VIEW vw_cpu AS
-	SELECT fk_servidor, avg(uso_cpu) as uso_cpu, data_hora FROM tb_registro
-		GROUP BY data_hora, fk_servidor;
+	SELECT fk_servidor, avg(uso_cpu) as uso_cpu,  DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+    FROM tb_registro
+	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
 SELECT * FROM vw_cpu;
 
 CREATE OR REPLACE VIEW vw_cpu_geral AS
-	SELECT avg(uso_cpu) as uso_cpu, DATE_FORMAT(data_hora, '%Y-%m-%d') as dataDados
+	SELECT avg(uso_cpu) as uso_cpu, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') as dataDados
     FROM tb_registro
-	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d');
+	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
 
 SELECT * FROM vw_cpu_geral;
 
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') AS dataDados
+	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
     FROM tb_registro
-	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d'), fk_servidor;
+	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
 SELECT * FROM vw_ram;
 
 CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d') AS dataDados FROM tb_registro
-		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d');
+	SELECT avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM tb_registro
+		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
 
 SELECT * FROM vw_ram_geral;
 
