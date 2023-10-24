@@ -223,17 +223,50 @@ DROP PROCEDURE IF EXISTS sp_kpi_geral;
 DELIMITER //
 CREATE PROCEDURE sp_kpi_geral(IN taxa_atualizacao INT)
 BEGIN
+	DECLARE limite INT;
+    SET limite = (select count(id_servidor) from tb_servidor);
+
+    DROP TABLE IF EXISTS quantidade_registros;
+    DROP TABLE IF EXISTS kpi_especifica;
+    DROP TABLE IF EXISTS banda_larga;
 	DROP TABLE IF EXISTS kpi_geral;
+	
+	CREATE TEMPORARY TABLE quantidade_registros (
+		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
+    );
+	    
+    CREATE TEMPORARY TABLE kpi_especifica(
+		
+	SELECT
+		id_servidor,
+        codigo,
+		avg((qr.qtd_registros * 100) / (9 / taxa_atualizacao)) as kpi_uptime,
+		avg(taxt.taxa_transferencia) AS kpi_taxa,
+		avg(opt.taxa_transferencia) AS base_taxa,
+		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
+		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento,
+		avg(armazenamento_total) AS base_armazenamento
+		FROM tb_servidor
+			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
+			JOIN tb_opcao AS opt
+			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
+            JOIN quantidade_registros AS qr ON qr.fk_servidor = id_servidor
+			GROUP BY id_servidor, codigo, DAY(pct.data_hora)
+    );
+	
+    CREATE TEMPORARY TABLE banda_larga ( 
+    SELECT round(sum(taxa_transferencia), 2) AS 'uso_banda_larga' from vw_taxa_transferencia LIMIT limite
+    );
 
     CREATE TEMPORARY TABLE kpi_geral(
 		
 	SELECT
-		avg(kpi_esp.uptime) as media_uptime,
-		avg(banda_larga.uso_banda_larga) as uso_banda_larga,
+		avg(kpi_esp.kpi_uptime) as kpi_uptime,
+		avg(banda_larga.uso_banda_larga) as kpi_banda_larga,
 		avg(opt.taxa_transferencia) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
-		sum(armazenamento_total) as armazenamento_total,
-		sum(armazenamento_usado) AS kpi_armazenamento_usado
+		sum(armazenamento_usado) AS kpi_armazenamento,
+		sum(armazenamento_total) as base_armazenamento
 		FROM tb_servidor
 			JOIN kpi_especifica AS kpi_esp
             JOIN banda_larga AS banda_larga
