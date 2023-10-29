@@ -51,6 +51,18 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   PRIMARY KEY (id_opcao)
   );
   
+CREATE TABLE IF NOT EXISTS tb_alerta (
+	id_alerta INT NOT NULL AUTO_INCREMENT,
+    nivel_alerta TINYINT NOT NULL,
+    data_hora DATETIME DEFAULT(now()),
+    visualizado BOOLEAN DEFAULT(0),
+	descricao VARCHAR(250) NOT NULL,
+    fk_servidor INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
+    CHECK (nivel_alerta IN (0,1,2,3)),
+    PRIMARY KEY (id_alerta)
+    );
+  
 
 -- LISTA DE INSERTS
   
@@ -98,6 +110,13 @@ INSERT INTO tb_registro VALUES
         (null, 2002, '2023-10-23 15:00:00', 869, 85, 89, 421),
         (null, 2002, '2023-10-23 16:00:00', 869, 85, 89, 421),
 		(null, 2002, '2023-10-23 17:00:00', 956, 95, 93, 413);
+        
+INSERT INTO tb_alerta VALUES
+ (NULL,1,'2023-10-23 10:00:00',default,'CPU em 74% do funcionamento normal', 2000),
+ (NULL,0,'2023-10-23 12:00:00',default,'RAM em 9% do funcionamento normal', 2000),
+ (NULL,4,'2023-10-23 14:00:00',default,'CPU em 97% do funcionamento normal', 2001),
+ (NULL,3,'2023-10-23 16:00:00',default,'CPU em 74% do funcionamento normal', 2001),
+ (NULL,1,'2023-10-23 18:00:00',default,'RAM em 34% do funcionamento normal', 2002);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 500, 30000);
