@@ -114,7 +114,7 @@ INSERT INTO tb_registro VALUES
 INSERT INTO tb_alerta VALUES
  (NULL,1,'2023-10-23 10:00:00',default,'CPU em 74% do funcionamento normal', 2000),
  (NULL,0,'2023-10-23 12:00:00',default,'RAM em 9% do funcionamento normal', 2000),
- (NULL,4,'2023-10-23 14:00:00',default,'CPU em 97% do funcionamento normal', 2001),
+ (NULL,3,'2023-10-23 14:00:00',default,'CPU em 97% do funcionamento normal', 2001),
  (NULL,3,'2023-10-23 16:00:00',default,'CPU em 74% do funcionamento normal', 2001),
  (NULL,1,'2023-10-23 18:00:00',default,'RAM em 34% do funcionamento normal', 2002);
         
