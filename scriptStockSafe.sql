@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   
 CREATE TABLE IF NOT EXISTS tb_alerta (
 	id_alerta INT NOT NULL AUTO_INCREMENT,
+	data_hora DATETIME DEFAULT(now()),
     nivel_alerta TINYINT NOT NULL,
-    data_hora DATETIME DEFAULT(now()),
     visualizado BOOLEAN DEFAULT(0),
 	descricao VARCHAR(250) NOT NULL,
     fk_servidor INT NOT NULL,
@@ -112,11 +112,11 @@ INSERT INTO tb_registro VALUES
 		(null, 2002, '2023-10-23 17:00:00', 956, 95, 93, 413);
         
 INSERT INTO tb_alerta VALUES
- (NULL,1,'2023-10-23 10:00:00',default,'CPU em 74% do funcionamento normal', 2000),
- (NULL,0,'2023-10-23 12:00:00',default,'RAM em 9% do funcionamento normal', 2000),
- (NULL,3,'2023-10-23 14:00:00',default,'CPU em 97% do funcionamento normal', 2001),
- (NULL,3,'2023-10-23 16:00:00',default,'CPU em 74% do funcionamento normal', 2001),
- (NULL,1,'2023-10-23 18:00:00',default,'RAM em 34% do funcionamento normal', 2002);
+ (NULL,'2023-10-23 10:00:00',1,default,'CPU em 74% do funcionamento normal', 2000),
+ (NULL,'2023-10-23 12:00:00',0,default,'RAM em 9% do funcionamento normal', 2000),
+ (NULL,'2023-10-23 14:00:00',3,default,'CPU em 97% do funcionamento normal', 2001),
+ (NULL,'2023-10-23 16:00:00',1,default,'CPU em 74% do funcionamento normal', 2001),
+ (NULL,'2023-10-23 18:00:00',0,default,'RAM em 34% do funcionamento normal', 2002);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 500, 30000);
@@ -312,3 +312,4 @@ END //
 DELIMITER ;
 
 CALL sp_kpi_geral(1);
+
