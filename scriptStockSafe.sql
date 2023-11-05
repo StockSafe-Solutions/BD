@@ -11,12 +11,12 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(125) NOT NULL,
-  funcao VARCHAR(75) NOT NULL,
-  data_nascimento DATE NOT NULL,
+  nome VARCHAR(125),
+  funcao VARCHAR(75),
+  data_nascimento DATE,
   foto VARCHAR(300) NULL,
-  email VARCHAR(125) NOT NULL,
-  senha VARCHAR(20) NOT NULL,
+  email VARCHAR(125),
+  senha VARCHAR(20),
   PRIMARY KEY (id_funcionario)
   );
   
@@ -45,23 +45,11 @@ CREATE TABLE IF NOT EXISTS tb_registro (
     
 CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
-  banda_larga SMALLINT DEFAULT 155,
-  taxa_transferencia DECIMAL(10,2) DEFAULT 1000.00,
-  intervalo_atualizacao INT DEFAULT 60000,
+  banda_larga SMALLINT DEFAULT(155),
+  taxa_transferencia DECIMAL(10,2) DEFAULT(1000.00),
+  intervalo_atualizacao INT DEFAULT(60000),
   PRIMARY KEY (id_opcao)
   );
-  
-CREATE TABLE IF NOT EXISTS tb_alerta (
-	id_alerta INT NOT NULL AUTO_INCREMENT,
-	data_hora DATETIME DEFAULT(now()),
-    nivel_alerta TINYINT NOT NULL,
-    visualizado BOOLEAN DEFAULT(0),
-	descricao VARCHAR(250) NOT NULL,
-    fk_servidor INT NOT NULL,
-    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
-    CHECK (nivel_alerta IN (0,1,2,3)),
-    PRIMARY KEY (id_alerta)
-    );
   
 
 -- LISTA DE INSERTS
@@ -71,6 +59,9 @@ INSERT INTO tb_funcionario VALUES (2,'Gustavo Pereira','Analista','2005-06-13',n
 INSERT INTO tb_funcionario VALUES (3,'Gabriel Bazante','Gerente de infraestrutura','2005-06-13',null,'gabriel@b3.com','urubu100');
 INSERT INTO tb_funcionario VALUES (4,'Stephany Justino','Gerente de operações','2005-06-13',null,'stephany@b3.com','urubu100');
 INSERT INTO tb_funcionario VALUES (5,'Rafael Rocha','COO','2005-06-13',null,'rafael@b3.com','urubu100');
+
+SELECT * FROM tb_funcionario;
+
 
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador) VALUES
 		('SVJW32', 500.5, 250.2, 1),
@@ -109,14 +100,8 @@ INSERT INTO tb_registro VALUES
         (null, 2002, '2023-10-23 14:00:00', 593, 59, 78, 464),
         (null, 2002, '2023-10-23 15:00:00', 869, 85, 89, 421),
         (null, 2002, '2023-10-23 16:00:00', 869, 85, 89, 421),
-		(null, 2002, '2023-10-23 17:00:00', 956, 95, 93, 413);
-        
-INSERT INTO tb_alerta VALUES
- (NULL,'2023-10-23 10:00:00',1,default,'CPU em 74% do funcionamento normal', 2000),
- (NULL,'2023-10-23 12:00:00',0,default,'RAM em 9% do funcionamento normal', 2000),
- (NULL,'2023-10-23 14:00:00',3,default,'CPU em 97% do funcionamento normal', 2001),
- (NULL,'2023-10-23 16:00:00',1,default,'CPU em 74% do funcionamento normal', 2001),
- (NULL,'2023-10-23 18:00:00',0,default,'RAM em 34% do funcionamento normal', 2002);
+		(null, 2002, '2023-10-23 17:00:00', 956, 95, 93, 413), 
+        (null, 2002, '2023-10-23 17:00:00', 956, 95, 93, 413);
         
 INSERT INTO tb_opcao VALUES
 (NULL, 100, 500, 30000);
@@ -313,3 +298,4 @@ DELIMITER ;
 
 CALL sp_kpi_geral(1);
 
+SELECT uso_cpu FROM tb_registro WHERE uso_ram > 90;
