@@ -11,12 +11,12 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS tb_funcionario (
   id_funcionario INT NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(125) NOT NULL,
-  funcao VARCHAR(75) NOT NULL,
-  data_nascimento DATE NOT NULL,
+  nome VARCHAR(125),
+  funcao VARCHAR(75),
+  data_nascimento DATE,
   foto VARCHAR(300) NULL,
-  email VARCHAR(125) NOT NULL,
-  senha VARCHAR(20) NOT NULL,
+  email VARCHAR(125),
+  senha VARCHAR(20),
   PRIMARY KEY (id_funcionario)
   );
   
