@@ -10,82 +10,73 @@ CREATE OR REPLACE VIEW vw_base_registros AS
 		FROM tb_registro AS r
         JOIN tb_categoria AS c on r.fk_cat = c.id_cat
 			GROUP BY fk_servidor, data_hora, c.id_cat;
-
-SET @base = NULL; -- Criando uma variável para armazenar o comando
+            
+SET @executor = NULL;
 SELECT
     GROUP_CONCAT(DISTINCT CONCAT('max(case when tipo_cat = \'',
-                tipo_cat,
-                '\' then media end) \'',
-                tipo_cat,'\'')) -- Listando todas as colunas e criando um case para cada uma
-INTO @base FROM vw_base_registros; -- Aqui vem o nome da sua view de base!
+                tipo_cat,'\' then media end) \'',
+                LOWER(REPLACE(tipo_cat," ","_")),
+                '\'')) -- Listando todas as colunas e criando um case para cada uma
+INTO @executor FROM vw_base_registros; -- Aqui vem o nome da sua view!
+SET @executor = CONCAT('
+	CREATE OR REPLACE VIEW vw_registro AS
+	SELECT fk_servidor, data_hora, ', @executor, '
+	FROM vw_base_registros
+	GROUP BY fk_servidor, data_hora');
+PREPARE criarView FROM @executor;
+EXECUTE criarView; 
 
+SELECT * FROM vw_registro;
 -- VIEW DOS SERVIDORES
-CREATE VIEW vw_servidor AS
+CREATE OR REPLACE VIEW vw_servidor AS
 	SELECT 
 	s.*,
 	DATE_FORMAT(d.data_hora,"%d/%m/%Y") as ultimaData,
 	DATE_FORMAT(d.data_hora,"%H:%i") as ultimoHorario
 		FROM tb_servidor AS s
 		LEFT JOIN(SELECT fk_servidor, max(data_hora) as data_hora 
-					FROM tb_registro GROUP BY fk_servidor) AS d
+					FROM vw_registro GROUP BY fk_servidor) AS d
 		ON s.id_servidor = d.fk_servidor;
-            
+
 SELECT * FROM vw_servidor;
 
 -- -------------------------------------------------------------------- Gráficos
--- CPU
-DROP PROCEDURE IF EXISTS sp_especifica;
-DELIMITER $
-CREATE PROCEDURE sp_especifica(IN vCod_servidor INT)
-	BEGIN
-		SET @sql = CONCAT('SELECT fk_servidor, data_hora, ', @base, '
-		FROM vw_base_registros
-        WHERE fk_servidor LIKE ',vCod_servidor,'
-        GROUP BY fk_servidor, data_hora;');
-		PREPARE registros FROM @sql;
-		EXECUTE registros;
-    END $
-DELIMITER ;
-call sp_especifica(2001);
-
+-- VIEW CPU
 CREATE OR REPLACE VIEW vw_cpu AS
-	SELECT fk_servidor, avg(uso_cpu) as uso_cpu,  DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
-    FROM tb_registro
+	SELECT fk_servidor, avg(uso_da_cpu) as uso_da_cpu,  DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+    FROM vw_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
 SELECT * FROM vw_cpu;
 
 CREATE OR REPLACE VIEW vw_cpu_geral AS
-	SELECT avg(uso_cpu) as uso_cpu, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') as dataDados
-    FROM tb_registro
+	SELECT avg(uso_da_cpu) as uso_da_cpu, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') as dataDados
+    FROM vw_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
 
 SELECT * FROM vw_cpu_geral;
 
 -- RAM        
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
-    FROM tb_registro
+	SELECT fk_servidor, avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+    FROM vw_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
 SELECT * FROM vw_ram;
 
 CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT avg(uso_ram) as uso_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM tb_registro
+	SELECT avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM vw_registro
 		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
 
 SELECT * FROM vw_ram_geral;
 
--- -------------------------------------------------------------------- //Gráficos
-
-
 -- -------------------------------------------------------------------- KPI
 -- Taxa de Transferencia
-CREATE OR REPLACE VIEW vw_taxa_transferencia AS
-	SELECT fk_servidor, avg(taxa_transferencia) as taxa_transferencia, data_hora FROM tb_registro
+CREATE OR REPLACE VIEW vw_taxa_de_transferência AS
+	SELECT fk_servidor, avg(taxa_de_transferência) as taxa_de_transferência, data_hora FROM vw_registro
 		GROUP BY data_hora, fk_servidor;
 
-SELECT * FROM vw_taxa_transferencia;
+SELECT * FROM vw_taxa_de_transferência;
 
 -- PACOTES ENVIADOS POR DATA/HORA
 CREATE OR REPLACE VIEW vw_pacotes_enviados 
@@ -93,7 +84,7 @@ CREATE OR REPLACE VIEW vw_pacotes_enviados
     fk_servidor,
     avg(pacotes_enviados) as 'pacotes_enviados',
     data_hora
-    FROM tb_registro
+    FROM vw_registro
 		GROUP BY data_hora, fk_servidor;
 
 SELECT * FROM vw_pacotes_enviados;
@@ -108,7 +99,7 @@ BEGIN
     DROP TABLE IF EXISTS kpi_especifica;
 	
 	CREATE TEMPORARY TABLE quantidade_registros (
-		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
+		select fk_servidor, count(data_hora) as qtd_registros from vw_registro group by fk_servidor
     );
     
     CREATE TEMPORARY TABLE kpi_especifica(
@@ -117,13 +108,13 @@ BEGIN
 		id_servidor,
         codigo,
 		avg((qr.qtd_registros * 100) / (9 / taxa_atualizacao)) as kpi_uptime,
-		avg(taxt.taxa_transferencia) AS kpi_taxa,
-		avg(opt.taxa_transferencia) AS base_taxa,
+		avg(taxt.taxa_de_transferência) AS kpi_taxa,
+		avg(opt.taxa_de_transferência) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
 		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento,
 		avg(armazenamento_total) AS base_armazenamento
 		FROM tb_servidor
-			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
+			JOIN vw_taxa_de_transferência AS taxt ON taxt.fk_servidor = id_servidor
 			JOIN tb_opcao AS opt
 			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
             JOIN quantidade_registros AS qr ON qr.fk_servidor = id_servidor
@@ -150,7 +141,7 @@ BEGIN
     DROP TABLE IF EXISTS banda_larga;
     
     CREATE TEMPORARY TABLE banda_larga ( 
-    SELECT round(sum(taxa_transferencia), 2) AS 'uso_banda_larga' from vw_taxa_transferencia LIMIT limite
+    SELECT round(sum(taxa_de_transferência), 2) AS 'uso_banda_larga' from vw_taxa_de_transferência LIMIT limite
     );
     
     select * from banda_larga;
@@ -173,7 +164,7 @@ BEGIN
 	DROP TABLE IF EXISTS kpi_geral;
 	
 	CREATE TEMPORARY TABLE quantidade_registros (
-		select fk_servidor, count(data_hora) as qtd_registros from tb_registro group by fk_servidor
+		select fk_servidor, count(data_hora) as qtd_registros from vw_registro group by fk_servidor
     );
 	    
     CREATE TEMPORARY TABLE kpi_especifica(
@@ -182,13 +173,13 @@ BEGIN
 		id_servidor,
         codigo,
 		avg((qr.qtd_registros * 100) / (9 / taxa_atualizacao)) as kpi_uptime,
-		avg(taxt.taxa_transferencia) AS kpi_taxa,
-		avg(opt.taxa_transferencia) AS base_taxa,
+		avg(taxt.taxa_de_transferência) AS kpi_taxa,
+		avg(opt.taxa_de_transferência) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
 		avg((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento,
 		avg(armazenamento_total) AS base_armazenamento
 		FROM tb_servidor
-			JOIN vw_taxa_transferencia AS taxt ON taxt.fk_servidor = id_servidor
+			JOIN vw_taxa_de_transferência AS taxt ON taxt.fk_servidor = id_servidor
 			JOIN tb_opcao AS opt
 			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
             JOIN quantidade_registros AS qr ON qr.fk_servidor = id_servidor
@@ -196,7 +187,7 @@ BEGIN
     );
 	
     CREATE TEMPORARY TABLE banda_larga ( 
-    SELECT round(sum(taxa_transferencia), 2) AS 'uso_banda_larga' from vw_taxa_transferencia LIMIT limite
+    SELECT round(sum(taxa_de_transferência), 2) AS 'uso_banda_larga' from vw_taxa_de_transferência LIMIT limite
     );
 
     CREATE TEMPORARY TABLE kpi_geral(
@@ -204,7 +195,7 @@ BEGIN
 	SELECT
 		avg(kpi_esp.kpi_uptime) as kpi_uptime,
 		avg(banda_larga.uso_banda_larga) as kpi_banda_larga,
-		avg(opt.taxa_transferencia) AS base_taxa,
+		avg(opt.taxa_de_transferência) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
 		sum(armazenamento_usado) AS kpi_armazenamento,
 		sum(armazenamento_total) as base_armazenamento

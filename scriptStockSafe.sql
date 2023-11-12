@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS tb_registro (
     
 CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
-  banda_larga SMALLINT DEFAULT(155),
-  taxa_transferencia DECIMAL(10,2) DEFAULT(1000.00),
-  intervalo_atualizacao INT DEFAULT(60000),
+  banda_larga SMALLINT DEFAULT 155,
+  taxa_de_transferência DECIMAL(10,2) DEFAULT 1000.00,
+  intervalo_atualizacao INT DEFAULT 60000,
   PRIMARY KEY (id_opcao)
   );
   
