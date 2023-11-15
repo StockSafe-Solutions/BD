@@ -76,3 +76,18 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     CHECK (nivel_alerta IN (0,1,2,3)),
     PRIMARY KEY (id_alerta)
     );
+
+CREATE TABLE tb_tag (
+	id_tag INT NOT NULL AUTO_INCREMENT,
+    nome_tag VARCHAR(75) NOT NULL UNIQUE,
+	cor_tag CHAR(6) NOT NULL,
+    PRIMARY KEY (id_tag)
+    );
+    
+CREATE TABLE tb_tag_servidor(
+	fk_servidor INT NOT NULL,
+    fk_tag INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
+    FOREIGN KEY (fk_tag) REFERENCES tb_tag (id_tag),
+    PRIMARY KEY (fk_servidor, fk_tag)
+	);
