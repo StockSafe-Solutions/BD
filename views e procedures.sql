@@ -72,6 +72,13 @@ CREATE OR REPLACE VIEW vw_ram_usada AS
     GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
     
     SELECT * FROM vw_ram_usada WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
+    
+CREATE OR REPLACE VIEW vw_ram_livre AS
+SELECT fk_servidor,ROUND(AVG(uso_disponivel_da_ram), 2) AS ram_livre, date_format(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+    FROM vw_registro
+    GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
+    
+    SELECT * FROM vw_ram_livre WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
 
 CREATE OR REPLACE VIEW vw_ram_g AS
 	SELECT fk_servidor, uso_da_ram as uso_da_ram, data_hora AS dataDados FROM vw_registro;
