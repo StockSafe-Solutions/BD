@@ -30,14 +30,20 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
-
+select * from tb_servidor;
 CREATE TABLE IF NOT EXISTS tb_categoria(
 	id_cat INT NOT NULL,
     tipo_cat VARCHAR(45) NOT NULL,
     unidade_cat VARCHAR(25),
     PRIMARY KEY (id_cat)
 	);
+DESC tb_categoria;
 
+
+SELECT * FROM vw_ram 
+        WHERE fk_servidor = 
+            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32');
+            
 CREATE TABLE IF NOT EXISTS tb_monitorar(
 	fk_servidor INT NOT NULL,
     fk_cat INT NOT NULL,
@@ -76,3 +82,7 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     CHECK (nivel_alerta IN (0,1,2,3)),
     PRIMARY KEY (id_alerta)
     );
+    
+    select * from tb_funcionario;
+    
+    SELECT * FROM tb_funcionario WHERE nome != "null";

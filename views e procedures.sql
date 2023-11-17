@@ -12,6 +12,7 @@ CREATE OR REPLACE VIEW vw_base_registros AS
 			GROUP BY fk_servidor, data_hora, c.id_cat;
             
 SET @executor = NULL;
+select * from vw_base_registros;
 SELECT
     GROUP_CONCAT(DISTINCT CONCAT('max(case when tipo_cat = \'',
                 tipo_cat,'\' then media end) \'',
@@ -63,6 +64,22 @@ CREATE OR REPLACE VIEW vw_ram AS
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
 SELECT * FROM vw_ram;
+
+-- torta
+CREATE OR REPLACE VIEW vw_ram_usada AS
+	SELECT fk_servidor,ROUND(AVG(uso_total_da_ram), 2) AS ram_uso, date_format(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+    FROM vw_registro
+    GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
+    
+    SELECT * FROM vw_ram_usada WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
+
+CREATE OR REPLACE VIEW vw_ram_g AS
+	SELECT fk_servidor, uso_da_ram as uso_da_ram, data_hora AS dataDados FROM vw_registro;
+    
+    SELECT * FROM vw_ram_g;
+    
+    SELECT * FROM vw_ram_g
+        WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32') ORDER BY dataDados DESC limit 7;
 
 CREATE OR REPLACE VIEW vw_ram_geral AS
 	SELECT avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM vw_registro
@@ -212,3 +229,16 @@ END //
 DELIMITER ;
 
 CALL sp_kpi_geral(1);
+
+SELECT * FROM vw_ram 
+        WHERE fk_servidor = 
+            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ORDER BY dataDados DESC);
+
+SELECT * FROM vw_ram 
+        WHERE fk_servidor = 
+            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'B7WGPJ');
+            
+SELECT * FROM vw_ram 
+        WHERE fk_servidor = 
+            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'RQ8Q28');
+            
