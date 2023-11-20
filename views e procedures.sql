@@ -26,7 +26,7 @@ SET @executor = CONCAT('
 PREPARE criarView FROM @executor;
 EXECUTE criarView; 
 
-SELECT * FROM vw_registro;
+SELECT * FROM vw_registro ORDER BY data_hora;
 -- VIEW DOS SERVIDORES
 CREATE OR REPLACE VIEW vw_servidor AS
 	SELECT 

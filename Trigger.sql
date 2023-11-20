@@ -10,7 +10,7 @@ CREATE TRIGGER tr_alerta
         SET @nivel = 0;
     
 		-- CPU
-		IF NEW.uso_cpu >= 80 OR NEW.uso_cpu <= 30 THEN
+		IF NEW.uso_da_cpu >= 80 OR NEW.uso_da_cpu <= 30 THEN
 			SET @nivel = 1;
 				IF NEW.uso_cpu >= 80 THEN
 					SET @nivel = 2;

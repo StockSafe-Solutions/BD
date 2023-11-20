@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS tb_funcionario (
   email VARCHAR(125),
   senha VARCHAR(20),
   PRIMARY KEY (id_funcionario)
-  );
+);
   
 CREATE TABLE IF NOT EXISTS tb_servidor (
   id_servidor INT NOT NULL AUTO_INCREMENT,
@@ -28,15 +28,15 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   id_autenticador INT,
   PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
-    ) 
-    AUTO_INCREMENT = 2000;
+) 
+AUTO_INCREMENT = 2000;
 
 CREATE TABLE IF NOT EXISTS tb_categoria(
 	id_cat INT NOT NULL,
     tipo_cat VARCHAR(45) NOT NULL,
     unidade_cat VARCHAR(25),
     PRIMARY KEY (id_cat)
-	);
+);
 
 CREATE TABLE IF NOT EXISTS tb_monitorar(
 	fk_servidor INT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   PRIMARY KEY (id_registro, fk_servidor,fk_cat),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
   FOREIGN KEY (fk_cat) REFERENCES tb_categoria (id_cat)
-	);
+);
     
 CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   taxa_de_transferência DECIMAL(10,2) DEFAULT 1000.00,
   intervalo_atualizacao INT DEFAULT 60000,
   PRIMARY KEY (id_opcao)
-  );
+);
   
 CREATE TABLE IF NOT EXISTS tb_alerta (
 	id_alerta INT NOT NULL AUTO_INCREMENT,
@@ -75,4 +75,17 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
     CHECK (nivel_alerta IN (0,1,2,3)),
     PRIMARY KEY (id_alerta)
-    );
+);
+
+CREATE TABLE IF NOT EXISTS tb_tarefa (
+	id_tarefa INT NOT NULL AUTO_INCREMENT,
+    pid_tarefa INT NOT NULL,
+    data_hora DATETIME DEFAULT(now()),
+    uso_cpu DECIMAL(5,2) NOT NULL,
+    uso_ram DECIMAL(5,2) NOT NULL,
+    uso_bytes INT NOT NULL,
+    uso_memoria_virtual INT NOT NULL,
+    fk_servidor INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
+    PRIMARY KEY (id_tarefa)
+);
