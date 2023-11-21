@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
 CREATE TABLE IF NOT EXISTS tb_tarefa (
 	id_tarefa INT NOT NULL AUTO_INCREMENT,
     pid_tarefa INT NOT NULL,
+    nome_tarefa VARCHAR(100),
     data_hora DATETIME DEFAULT(now()),
     uso_cpu DECIMAL(5,2) NOT NULL,
     uso_ram DECIMAL(5,2) NOT NULL,
