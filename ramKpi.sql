@@ -24,13 +24,22 @@ WHERE vw_ram_usada.ram_uso IS NOT NULL
 AND vw_ram_livre.ram_livre IS NOT NULL;
 
 
-SELECT MINUTE(data_hora) AS dataDados,
+SELECT data_hora AS dataDados,
        ROUND(AVG(uso_da_ram)) AS avgUsoRam,
        ROUND(AVG(uso_disponivel_da_ram)) AS avgUsoDisponivelRam,
        ROUND(AVG(uso_total_da_ram)) AS avgTotalRam
 FROM vw_registro
-GROUP BY MINUTE(data_hora)
-ORDER BY dataDados DESC
-LIMIT 1;
+GROUP BY data_hora
+ORDER BY dataDados DESC;
+
+SELECT DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados,
+       ROUND(AVG(uso_da_ram)) AS avgUsoRam,
+       ROUND(AVG(uso_disponivel_da_ram)) AS avgUsoDisponivelRam,
+       ROUND(AVG(uso_total_da_ram)) AS avgUsoTotalRam
+FROM vw_registro
+WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32')
+     and data_hora LIKE '%2023-11-22%'
+GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i')
+ORDER BY dataDados;
 
 
