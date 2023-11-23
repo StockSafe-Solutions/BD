@@ -39,10 +39,6 @@ CREATE TABLE IF NOT EXISTS tb_categoria(
 	);
 DESC tb_categoria;
 
-
-SELECT * FROM vw_ram 
-        WHERE fk_servidor = 
-            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32');
             
 CREATE TABLE IF NOT EXISTS tb_monitorar(
 	fk_servidor INT NOT NULL,
@@ -83,6 +79,3 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     PRIMARY KEY (id_alerta)
     );
     
-    select * from tb_funcionario;
-    
-    SELECT * FROM tb_funcionario WHERE nome != "null";

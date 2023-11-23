@@ -58,12 +58,16 @@ CREATE OR REPLACE VIEW vw_cpu_geral AS
 SELECT * FROM vw_cpu_geral;
 
 -- RAM        
+SELECT * FROM vw_ram;
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+	SELECT fk_servidor,round( avg(uso_da_ram)) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
     FROM vw_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
 
-SELECT * FROM vw_ram;
+-- RAM
+SELECT * FROM vw_ram order by dataDados desc limit 1 ;
+SELECT  dataDados AS Dia, MINUTE(dataDados) AS Minutos FROM vw_ram WHERE fk_servidor = 
+            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32') ORDER BY dataDados ASC;
 
 -- torta
 CREATE OR REPLACE VIEW vw_ram_usada AS
@@ -71,7 +75,7 @@ CREATE OR REPLACE VIEW vw_ram_usada AS
     FROM vw_registro
     GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
     
-    SELECT * FROM vw_ram_usada WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
+    SELECT * FROM vw_ram_usada WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados asc ;
     
 CREATE OR REPLACE VIEW vw_ram_livre AS
 SELECT fk_servidor,ROUND(AVG(uso_disponivel_da_ram)) AS ram_livre, date_format(data_hora, '%Y-%m-%d %h:%i') AS dataDados
@@ -80,19 +84,6 @@ SELECT fk_servidor,ROUND(AVG(uso_disponivel_da_ram)) AS ram_livre, date_format(d
     
     SELECT * FROM vw_ram_livre WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
 
-CREATE OR REPLACE VIEW vw_ram_g AS
-	SELECT fk_servidor, uso_da_ram as uso_da_ram, data_hora AS dataDados FROM vw_registro;
-    
-    SELECT * FROM vw_ram_g;
-    
-    SELECT * FROM vw_ram_g
-        WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32') ORDER BY dataDados DESC limit 7;
-
-CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM vw_registro
-		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
-
-SELECT * FROM vw_ram_geral;
 
 -- -------------------------------------------------------------------- KPI
 -- Taxa de Transferencia
@@ -237,15 +228,5 @@ DELIMITER ;
 
 CALL sp_kpi_geral(1);
 
-SELECT * FROM vw_ram 
-        WHERE fk_servidor = 
-            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ORDER BY dataDados DESC);
 
-SELECT * FROM vw_ram 
-        WHERE fk_servidor = 
-            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'B7WGPJ');
-            
-SELECT * FROM vw_ram 
-        WHERE fk_servidor = 
-            (SELECT id_servidor FROM tb_servidor WHERE codigo = 'RQ8Q28');
-            
+

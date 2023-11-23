@@ -21,7 +21,7 @@ INSERT INTO tb_categoria VALUES
 		(4, "Taxa de transferência", "MB/s");
         
         
-INSERT INTO tb_categoria VALUES (5, "Uso total da RAM", "%"),
+INSERT INTO tb_categoria VALUES (5, "Total da RAM", "GB"),
 								(6, "Uso disponivel da RAM", "%");
 
 SELECT * FROM tb_categoria;
