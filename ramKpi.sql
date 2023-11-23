@@ -23,7 +23,14 @@ JOIN vw_ram_livre
 WHERE vw_ram_usada.ram_uso IS NOT NULL
 AND vw_ram_livre.ram_livre IS NOT NULL;
 
-SELECT data_hora, uso_da_ram, uso_disponivel_da_ram, uso_total_da_ram FROM vw_registro ORDER BY data_hora DESC LIMIT 1 ;
+
+SELECT MINUTE(data_hora) AS dataDados,
+       ROUND(AVG(uso_da_ram)) AS avgUsoRam,
+       ROUND(AVG(uso_disponivel_da_ram)) AS avgUsoDisponivelRam,
+       ROUND(AVG(uso_total_da_ram)) AS avgTotalRam
+FROM vw_registro
+GROUP BY MINUTE(data_hora)
+ORDER BY dataDados DESC
+LIMIT 1;
 
 
-  

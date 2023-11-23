@@ -28,6 +28,7 @@ PREPARE criarView FROM @executor;
 EXECUTE criarView; 
 
 SELECT * FROM vw_registro;
+SELECT data_hora FROM vw_registro;
 -- VIEW DOS SERVIDORES
 CREATE OR REPLACE VIEW vw_servidor AS
 	SELECT 
