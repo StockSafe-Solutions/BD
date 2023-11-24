@@ -68,6 +68,8 @@ SELECT fk_servidor,ROUND(AVG(uso_disponivel_da_ram)) AS ram_livre, date_format(d
     GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
     
     SELECT * FROM vw_ram_livre WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32' ) ORDER BY dataDados DESC LIMIT 1;
+    
+
 
 
 
