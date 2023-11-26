@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
   fk_servidor INT NOT NULL,
   fk_cat INT NOT NULL,
-  data_hora DATETIME DEFAULT(now()),
+  data_hora DATETIME DEFAULT now(),
   valor DECIMAL(8,2) NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor,fk_cat),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   
 CREATE TABLE IF NOT EXISTS tb_alerta (
 	id_alerta INT NOT NULL AUTO_INCREMENT,
-	data_hora DATETIME DEFAULT(now()),
+	data_hora DATETIME DEFAULT now(),
     nivel_alerta TINYINT NOT NULL,
-    visualizado BOOLEAN DEFAULT(0),
+    visualizado BOOLEAN DEFAULT 0,
 	descricao VARCHAR(250) NOT NULL,
     fk_servidor INT NOT NULL,
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),

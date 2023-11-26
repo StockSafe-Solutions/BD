@@ -33,8 +33,7 @@ INSERT INTO tb_monitorar VALUES
 		(2003,1),         (2003,3),(2003,4),
 		(2004,1),(2004,2),(2004,3),(2004,4),
 		         (2005,2),(2005,3),(2005,4);
-desc tb_registro;
-SELECT * FROM tb_registro;
+
 INSERT INTO tb_registro VALUES 
 		(null, 2000, 1, '2023-10-23 10:00:00', 204),
 		(null, 2000, 2, '2023-10-23 10:00:00', 23),
@@ -102,8 +101,7 @@ INSERT INTO tb_registro VALUES
         (null, 2002, 2, '2023-10-23 18:00:00', 95),
 		(null, 2002, 3, '2023-10-23 18:00:00', 93),
 		(null, 2002, 4, '2023-10-23 18:00:00', 413);
-        
-        select * from tb_registro;
+
 INSERT INTO tb_alerta VALUES
  (NULL,'2023-10-23 10:00:00',1,default,'CPU em 74% do funcionamento normal', 2000),
  (NULL,'2023-10-23 12:00:00',0,default,'RAM em 9% do funcionamento normal', 2000),
