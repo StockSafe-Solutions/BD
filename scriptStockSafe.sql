@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS tb_tarefa (
     data_hora DATETIME DEFAULT(now()),
     uso_cpu DECIMAL(5,2) NOT NULL,
     uso_ram DECIMAL(5,2) NOT NULL,
-    uso_bytes INT NOT NULL,
-    uso_memoria_virtual INT NOT NULL,
+    uso_bytes BIGINT NOT NULL,
+    uso_memoria_virtual BIGINT NOT NULL,
     fk_servidor INT NOT NULL,
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
     PRIMARY KEY (id_tarefa)
