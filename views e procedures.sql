@@ -213,4 +213,4 @@ DELIMITER ;
 
 CALL sp_kpi_geral(1);
 
-SELECT * FROM tb_tarefa;
+SELECT * FROM tb_tarefa; 
