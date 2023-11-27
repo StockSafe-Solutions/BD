@@ -85,3 +85,4 @@ create table tb_tag_servidor (
   foreign key (fk_tag) references tb_tag (id_tag),
   primary key (fk_servidor, fk_tag)
 );
+
