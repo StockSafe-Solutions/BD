@@ -1,6 +1,6 @@
 -- LISTA DE INSERTS
   
-INSERT INTO tb_funcionario VALUES (1, 'Danilo Marques', 'Analista', '2005-07-11', null, 'danilo@b3.com', 'urubu100');
+INSERT INTO tb_funcionario VALUES (1,'Danilo Marques', 'Analista', '2005-07-11', null, 'danilo@b3.com', 'urubu100');
 INSERT INTO tb_funcionario VALUES (2,'Gustavo Pereira','Analista','2005-06-13',null,'gustavo@b3.com','urubu100');
 INSERT INTO tb_funcionario VALUES (3,'Gabriel Bazante','Gerente de infraestrutura','2005-06-13',null,'gabriel@b3.com','urubu100');
 INSERT INTO tb_funcionario VALUES (4,'Stephany Justino','Gerente de operações','2005-06-13',null,'stephany@b3.com','urubu100');

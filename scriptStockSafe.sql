@@ -77,10 +77,10 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     PRIMARY KEY (id_alerta)
 );
 
-CREATE TABLE IF NOT EXISTS tb_tarefa (
-	id_tarefa INT NOT NULL AUTO_INCREMENT,
-    pid_tarefa INT NOT NULL,
-    nome_tarefa VARCHAR(100),
+CREATE TABLE IF NOT EXISTS tb_processo (
+	id_proc INT NOT NULL AUTO_INCREMENT,
+    pid_proc INT NOT NULL,
+    nome_proc VARCHAR(100),
     data_hora DATETIME DEFAULT(now()),
     uso_cpu DECIMAL(5,2) NOT NULL,
     uso_ram DECIMAL(5,2) NOT NULL,
@@ -88,5 +88,5 @@ CREATE TABLE IF NOT EXISTS tb_tarefa (
     uso_memoria_virtual_mb DECIMAL(6,2) NOT NULL,
     fk_servidor INT NOT NULL,
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
-    PRIMARY KEY (id_tarefa)
+    PRIMARY KEY (id_proc)
 );
