@@ -231,24 +231,32 @@ ORDER BY quantidade DESC
 LIMIT 3;
 
 -- Pras kpis
-SELECT nome_proc,
-SUM(uso_cpu) as uso_total_cpu
+CREATE OR REPLACE VIEW vw_maior_uso_cpu AS
+SELECT nome_proc AS nome_cpu,
+SUM(uso_cpu) AS proc_total_cpu
 FROM tb_processo
-GROUP BY nome_proc
-ORDER BY uso_total_cpu DESC
+GROUP BY nome_cpu
+ORDER BY proc_total_cpu DESC
 LIMIT 1;
 
-SELECT nome_proc,
-SUM(uso_ram) as uso_total_ram
+CREATE OR REPLACE VIEW vw_maior_uso_ram AS
+SELECT nome_proc AS nome_ram,
+SUM(uso_ram) AS proc_total_ram
 FROM tb_processo
-GROUP BY nome_proc
-ORDER BY uso_total_ram DESC
+GROUP BY nome_ram
+ORDER BY proc_total_ram DESC
 LIMIT 1;
 
-SELECT SUM(uso_cpu) as uso_total_cpu
+CREATE OR REPLACE VIEW vw_uso_atual AS
+SELECT 
+SUM(uso_cpu) AS uso_total_cpu,
+SUM(uso_ram) AS uso_total_ram
 FROM tb_processo
 WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
 
-SELECT SUM(uso_ram) as uso_total_ram
-FROM tb_processo
-WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
+CREATE OR REPLACE VIEW vw_proc_kpi AS
+SELECT * FROM vw_maior_uso_cpu
+JOIN vw_maior_uso_ram
+JOIN vw_uso_atual;
+
+SELECT * FROM vw_proc_kpi;
