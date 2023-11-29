@@ -52,7 +52,7 @@ use StockSafe;
   create table tb_opcao (
     id_opcao int identity(1, 1) not null,
     banda_larga smallint default 155,
-    taxa_de_transfer�ncia decimal(10, 2) default 1000.00,
+    taxa_de_transferência decimal(10, 2) default 1000.00,
     intervalo_atualizacao int default 60000,
     primary key (id_opcao)
   )

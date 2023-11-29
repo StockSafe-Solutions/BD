@@ -17,9 +17,12 @@ CREATE OR ALTER VIEW vw_registro AS
 		MAX(CASE WHEN tipo_cat = 'Pacotes enviados' THEN media END) AS pacotes_enviados,
 		MAX(CASE WHEN tipo_cat = 'Taxa de transferência' THEN media END) AS taxa_de_transferencia,
 		MAX(CASE WHEN tipo_cat = 'Uso da CPU' THEN media END) AS uso_da_cpu,
-		MAX(CASE WHEN tipo_cat = 'Uso da RAM' THEN media END) AS uso_da_ram
+		MAX(CASE WHEN tipo_cat = 'Uso da RAM' THEN media END) AS uso_da_ram,
+		MAX(CASE WHEN tipo_cat = 'Total da RAM' THEN media END) AS total_da_ram,
+		MAX(CASE WHEN tipo_cat = 'Uso disponivel da RAM' THEN media END) AS ram_livre
 	FROM vw_base_registros
 	GROUP BY fk_servidor, data_hora;
+
 GO
 CREATE OR ALTER VIEW vw_servidor
 	AS
@@ -51,6 +54,7 @@ CREATE OR ALTER VIEW vw_cpu AS
 	  DATEPART(HOUR, data_hora),
 	  DATEPART(MINUTE, data_hora);
 GO
+
 CREATE OR ALTER VIEW vw_cpu_geral AS
 	SELECT
 	  AVG(uso_da_cpu) AS uso_da_cpu,
