@@ -213,4 +213,42 @@ DELIMITER ;
 
 CALL sp_kpi_geral(1);
 
-SELECT * FROM tb_processo; 
+-- SELECTS PARA OS PROCESSOS
+-- Pra tabela web
+SELECT *
+FROM tb_processo
+WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') 
+ORDER BY nome_proc;
+
+SELECT * FROM tb_processo ORDER BY uso_cpu;
+
+-- Pro gráfico
+SELECT nome_proc as nome, 
+COUNT(nome_proc) as quantidade 
+FROM tb_processo
+GROUP BY nome_proc
+ORDER BY quantidade DESC
+LIMIT 3;
+
+-- Pras kpis
+SELECT nome_proc,
+SUM(uso_cpu) as uso_total_cpu
+FROM tb_processo
+GROUP BY nome_proc
+ORDER BY uso_total_cpu DESC
+LIMIT 1;
+
+SELECT nome_proc,
+SUM(uso_ram) as uso_total_ram
+FROM tb_processo
+GROUP BY nome_proc
+ORDER BY uso_total_ram DESC
+LIMIT 1;
+
+SELECT SUM(uso_cpu) as uso_total_cpu
+FROM tb_processo
+WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
+
+SELECT SUM(uso_ram) as uso_total_ram
+FROM tb_processo
+WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
