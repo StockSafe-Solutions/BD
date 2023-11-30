@@ -1,6 +1,8 @@
 -- Transcrição de comandos mysql para sql server
+
 SELECT * FROM vw_registro;
 -- kpiRam
+GO
 SELECT TOP 1 DATEPART(MINUTE, data_hora) AS dataDados,
    ROUND(AVG(uso_da_ram),0) AS avgUsoRam,
    ROUND(AVG(ram_livre),0) AS avgUsoDisponivelRam,
@@ -11,11 +13,13 @@ SELECT TOP 1 DATEPART(MINUTE, data_hora) AS dataDados,
 	  ORDER BY dataDados DESC;
 
 -- ramEspecifico
+GO
 SELECT * FROM vw_ram 
         WHERE fk_servidor = 
             (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32') ORDER BY dataDados ASC;
 
 GO
+
 -- ramUsadaEspeficico
 SELECT TOP 1*
 FROM vw_ram
@@ -24,7 +28,7 @@ WHERE fk_servidor = (
   FROM tb_servidor
   WHERE codigo = 'SVJW32'
 ) ORDER BY dataDados DESC;
-GO
+
 -- ramLivreEspeficico
 GO
 	SELECT TOP 1* 
@@ -34,13 +38,14 @@ GO
 	FROM tb_servidor 
 	WHERE codigo = 'SVJW32'
 	) ORDER BY dataDados DESC;
-GO
+
 -- horaRam
 GO
 	SELECT dataDados AS Dia, DATEPART(MINUTE, dataDados) AS Minutos
 	FROM vw_ram WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32');
-GO
+
 --csvRam
+GO
 SELECT FORMAT(data_hora, 'yyyy-MM-dd hh:mm') AS dataDados,
        ROUND(AVG(uso_da_ram), 0) AS avgUsoRam,
        ROUND(AVG(ram_livre), 0) AS avgUsoDisponivelRam,
@@ -52,9 +57,11 @@ GROUP BY FORMAT(data_hora, 'yyyy-MM-dd hh:mm')
 ORDER BY dataDados;
 
 --listarRegistrosData
+GO
 SELECT * FROM vw_registro WHERE data_hora LIKE '%2023-11-29%';
 
  -- listarRegistrosDataEspeficico
+ GO
  SELECT * FROM vw_registro WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32')
      and data_hora LIKE '%2023-11-29%';
 
