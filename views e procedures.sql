@@ -229,12 +229,16 @@ ON proc.fk_servidor = serv.id_servidor
 ORDER BY nome_proc;
 
 -- ===================================================== Pro gráfico
-SELECT nome_proc AS nome, 
-COUNT(nome_proc) AS quantidade 
-FROM tb_processo
-GROUP BY nome_proc
-ORDER BY quantidade DESC
-LIMIT 3;
+SELECT proc.nome_proc AS nome, 
+COUNT(proc.nome_proc) AS quantidade,
+serv.codigo AS codigo
+FROM tb_processo AS proc
+JOIN tb_servidor AS serv
+ON proc.fk_servidor = serv.id_servidor
+WHERE codigo = 'SVJW32'
+GROUP BY nome_proc,
+codigo
+ORDER BY quantidade DESC LIMIT 5;
 
 -- ======================================================= Pras kpis
 -- Maior consumidor de CPU
