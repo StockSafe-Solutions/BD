@@ -50,3 +50,11 @@ WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32'
       AND CONVERT(VARCHAR, data_hora, 120) LIKE '%2023-11-29%'
 GROUP BY FORMAT(data_hora, 'yyyy-MM-dd hh:mm')
 ORDER BY dataDados;
+
+--listarRegistrosData
+SELECT * FROM vw_registro WHERE data_hora LIKE '%2023-11-29%';
+
+ -- listarRegistrosDataEspeficico
+ SELECT * FROM vw_registro WHERE fk_servidor = (SELECT id_servidor FROM tb_servidor WHERE codigo = 'SVJW32')
+     and data_hora LIKE '%2023-11-29%';
+

@@ -1,5 +1,5 @@
 USE StockSafe;
-SELECT * FROM vw_ram;
+
 GO
 CREATE OR ALTER VIEW vw_base_registros AS
     SELECT 

@@ -10,7 +10,7 @@ GO
 	CREATE OR ALTER VIEW vw_ram_livre
 	AS
 	SELECT fk_servidor,
-		   ROUND(AVG(ram_livre)) AS ram_livre,
+		   ROUND(AVG(ram_livre),0) AS ram_livre,
 		   CONVERT(VARCHAR(23), data_hora, 120) AS dataDados
 	FROM vw_registro
 	GROUP BY CONVERT(VARCHAR(23), data_hora, 120), fk_servidor;
