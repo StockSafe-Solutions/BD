@@ -128,7 +128,6 @@ VALUES
 (2, 6, '2023-11-29 20:00:10', 455),
 (3, 6, '2023-11-29 20:00:11', 786);
 
-
 INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
 VALUES 
   (1, 1, '2023-10-23 10:00:00', 204),

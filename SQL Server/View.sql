@@ -1,4 +1,5 @@
 USE StockSafe;
+SELECT * FROM vw_ram;
 GO
 CREATE OR ALTER VIEW vw_base_registros AS
     SELECT 
@@ -10,6 +11,7 @@ CREATE OR ALTER VIEW vw_base_registros AS
     JOIN tb_categoria AS c ON r.fk_cat = c.id_cat
     GROUP BY r.fk_servidor, data_hora, c.tipo_cat;
 GO
+
 CREATE OR ALTER VIEW vw_registro AS 
 	SELECT
 		fk_servidor,
@@ -29,7 +31,7 @@ CREATE OR ALTER VIEW vw_servidor
 	SELECT
 	s.*,
 		FORMAT(data_hora, 'dd/MMMM/yyyy', 'pt-BR') AS 'ultimaData',
-		FORMAT(data_hora, 'hh:mm', 'pt-BR') AS 'ultimoHorario'
+		FORMAT(data_hora, 'HH:mm', 'pt-BR') AS 'ultimoHorario'
 	FROM tb_servidor s
 	LEFT OUTER JOIN (
 		SELECT
@@ -40,11 +42,13 @@ CREATE OR ALTER VIEW vw_servidor
 ) d ON s.id_servidor = d.fk_servidor;
 
 GO
+
+
 CREATE OR ALTER VIEW vw_cpu AS
 	SELECT
 	  fk_servidor,
 	  AVG(uso_da_cpu) AS uso_da_cpu,
-	  FORMAT(MAX(data_hora), 'dd/MMMM/yyyy h:mm') AS dataDados
+	  FORMAT(MAX(data_hora), 'dd/MM/yyyy HH:mm') AS dataDados
 	FROM vw_registro
 	GROUP BY
 	  fk_servidor,
@@ -54,6 +58,7 @@ CREATE OR ALTER VIEW vw_cpu AS
 	  DATEPART(HOUR, data_hora),
 	  DATEPART(MINUTE, data_hora);
 GO
+
 
 CREATE OR ALTER VIEW vw_cpu_geral AS
 	SELECT
@@ -68,18 +73,10 @@ CREATE OR ALTER VIEW vw_cpu_geral AS
 	  DATEPART(MINUTE, data_hora);
 GO
 CREATE OR ALTER VIEW vw_ram AS
-	SELECT
-	  fk_servidor,
-	  AVG(uso_da_ram) AS uso_da_ram,
-	  FORMAT(MAX(data_hora), 'dd/MM/yyyy HH:mm') AS dataDados
-	FROM vw_registro
-	GROUP BY
-	  fk_servidor,
-	  DATEPART(YEAR, data_hora),
-	  DATEPART(MONTH, data_hora),
-	  DATEPART(DAY, data_hora),
-	  DATEPART(HOUR, data_hora),
-	  DATEPART(MINUTE, data_hora);
+	SELECT fk_servidor, AVG(uso_da_ram) AS uso_da_ram, FORMAT(data_hora, 'yyyy-MM-dd HH:mm') AS dataDados
+    FROM vw_registro
+	GROUP BY FORMAT(data_hora, 'yyyy-MM-dd HH:mm'), fk_servidor;
+
 GO
 CREATE OR ALTER VIEW vw_ram_geral AS
 	SELECT
@@ -93,6 +90,7 @@ CREATE OR ALTER VIEW vw_ram_geral AS
 	  DATEPART(HOUR, data_hora),
 	  DATEPART(MINUTE, data_hora);
 GO
+
 CREATE OR ALTER VIEW vw_taxa_de_transferencia AS
     SELECT
         fk_servidor,
