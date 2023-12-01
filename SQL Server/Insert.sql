@@ -1,5 +1,6 @@
-insert into tb_funcionario
-values (
+USE StockSafe;
+INSERT INTO tb_funcionario
+VALUES (
   'Danilo Marques', 
   'Analista', 
   '2005-07-11', 
@@ -7,8 +8,8 @@ values (
   'danilo@b3.com', 
   'urubu100'
 );
-insert into tb_funcionario
-values (
+INSERT INTO tb_funcionario
+VALUES (
   'Gustavo Pereira', 
   'Analista', 
   '2005-06-13', 
@@ -16,8 +17,8 @@ values (
   'gustavo@b3.com', 
   'urubu100'
 );
-insert into tb_funcionario
-values (
+INSERT INTO tb_funcionario
+VALUES (
   'Gabriel Bazante', 
   'Gerente de infraestrutura', 
   '2005-06-13', 
@@ -25,8 +26,8 @@ values (
   'gabriel@b3.com', 
   'urubu100'
 );
-insert into tb_funcionario
-values (
+INSERT INTO tb_funcionario
+VALUES (
   'Stephany Justino', 
   'Gerente de operações', 
   '2005-06-13', 
@@ -34,9 +35,8 @@ values (
   'stephany@b3.com', 
   'urubu100'
 );
-insert into tb_funcionario
-values (
-  5, 
+INSERT INTO tb_funcionario
+VALUES (
   'Rafael Rocha', 
   'COO', 
   '2005-06-13', 
@@ -44,40 +44,40 @@ values (
   'rafael@b3.com', 
   'urubu100'
 );
-insert into tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador)
-values (
+INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador)
+VALUES (
   'SVJW32', 
-  cast(500.5 as numeric), 
-  cast(250.2 as numeric), 
+  CAST(500.5 AS NUMERIC), 
+  CAST(250.2 AS NUMERIC), 
   1
 ), (
   'B7WGPJ', 
-  cast(750.0 as numeric), 
-  cast(375.5 as numeric), 
+  CAST(750.0 AS NUMERIC), 
+  CAST(375.5 AS NUMERIC), 
   1
 ), (
   'RQ8Q28', 
-  cast(300.3 as numeric), 
-  cast(150.1 as numeric), 
+  CAST(300.3 AS NUMERIC), 
+  CAST(150.1 AS NUMERIC), 
   1
 ), (
   'Y5WR5Y', 
-  cast(900.0 as numeric), 
-  cast(500.0 as numeric), 
+  CAST(900.0 AS NUMERIC), 
+  CAST(500.0 AS NUMERIC), 
   null
 ), (
   'TCUHVQ', 
-  cast(800.8 as numeric), 
-  cast(400.4 as numeric), 
+  CAST(800.8 AS NUMERIC), 
+  CAST(400.4 AS NUMERIC), 
   null
 ), (
   '17P51N', 
-  cast(600.6 as numeric), 
-  cast(300.3 as numeric), 
+  CAST(600.6 AS NUMERIC), 
+  CAST(300.3 AS NUMERIC), 
   null
 );
-insert into tb_categoria
-values (
+INSERT INTO tb_categoria
+VALUES (
   1, 
   'Pacotes enviados', 
   null
@@ -93,499 +93,144 @@ values (
   4, 
   'Taxa de transferência', 
   'MB/s'
+), (
+	5,'Total da RAM', 'GB'
+), (
+	6, 'Uso disponivel da RAM', '%'
 );
-insert into tb_monitorar
-values (
-  2000, 
-  1
-), (
-  2000, 
-  2
-), (
-  2000, 
-  3
-), (
-  2000, 
-  4
-), (
-  2001, 
-  1
-), (
-  2001, 
-  2
-), (
-  2001, 
-  3
-), (
-  2002, 
-  2
-), (
-  2002, 
-  3
-), (
-  2002, 
-  4
-), (
-  2003, 
-  1
-), (
-  2003, 
-  3
-), (
-  2003, 
-  4
-), (
-  2004, 
-  1
-), (
-  2004, 
-  2
-), (
-  2004, 
-  3
-), (
-  2004, 
-  4
-), (
-  2005, 
-  2
-), (
-  2005, 
-  3
-), (
-  2005, 
-  4
-);
-insert into tb_registro
-values (
-  null, 
-  2000, 
-  1, 
-  '2023-10-23 10:00:00', 
-  204
-), (
-  null, 
-  2000, 
-  2, 
-  '2023-10-23 10:00:00', 
-  23
-), (
-  null, 
-  2000, 
-  3, 
-  '2023-10-23 10:00:00', 
-  34
-), (
-  null, 
-  2000, 
-  4, 
-  '2023-10-23 10:00:00', 
-  499
-), (
-  null, 
-  2000, 
-  1, 
-  '2023-10-23 12:00:00', 
-  84
-), (
-  null, 
-  2000, 
-  2, 
-  '2023-10-23 12:00:00', 
-  5
-), (
-  null, 
-  2000, 
-  3, 
-  '2023-10-23 12:00:00', 
-  21
-), (
-  null, 
-  2000, 
-  4, 
-  '2023-10-23 12:00:00', 
-  487
-), (
-  null, 
-  2000, 
-  1, 
-  '2023-10-23 14:00:00', 
-  402
-), (
-  null, 
-  2000, 
-  2, 
-  '2023-10-23 14:00:00', 
-  67
-), (
-  null, 
-  2000, 
-  3, 
-  '2023-10-23 14:00:00', 
-  58
-), (
-  null, 
-  2000, 
-  4, 
-  '2023-10-23 14:00:00', 
-  439
-), (
-  null, 
-  2000, 
-  1, 
-  '2023-10-23 16:00:00', 
-  694
-), (
-  null, 
-  2000, 
-  2, 
-  '2023-10-23 16:00:00', 
-  72
-), (
-  null, 
-  2000, 
-  3, 
-  '2023-10-23 16:00:00', 
-  85
-), (
-  null, 
-  2000, 
-  4, 
-  '2023-10-23 16:00:00', 
-  402
-), (
-  null, 
-  2000, 
-  1, 
-  '2023-10-23 18:00:00', 
-  1230
-), (
-  null, 
-  2000, 
-  2, 
-  '2023-10-23 18:00:00', 
-  98
-), (
-  null, 
-  2000, 
-  3, 
-  '2023-10-23 18:00:00', 
-  99
-), (
-  null, 
-  2000, 
-  4, 
-  '2023-10-23 18:00:00', 
-  489
-);
-insert into tb_registro
-values (
-  null, 
-  2001, 
-  1, 
-  '2023-10-23 10:00:00', 
-  309
-), (
-  null, 
-  2001, 
-  2, 
-  '2023-10-23 10:00:00', 
-  45
-), (
-  null, 
-  2001, 
-  3, 
-  '2023-10-23 10:00:00', 
-  42
-), (
-  null, 
-  2001, 
-  1, 
-  '2023-10-23 12:00:00', 
-  102
-), (
-  null, 
-  2001, 
-  2, 
-  '2023-10-23 12:00:00', 
-  18
-), (
-  null, 
-  2001, 
-  3, 
-  '2023-10-23 12:00:00', 
-  21
-), (
-  null, 
-  2001, 
-  1, 
-  '2023-10-23 14:00:00', 
-  494
-), (
-  null, 
-  2001, 
-  2, 
-  '2023-10-23 14:00:00', 
-  56
-), (
-  null, 
-  2001, 
-  3, 
-  '2023-10-23 14:00:00', 
-  48
-), (
-  null, 
-  2001, 
-  1, 
-  '2023-10-23 16:00:00', 
-  853
-), (
-  null, 
-  2001, 
-  2, 
-  '2023-10-23 16:00:00', 
-  89
-), (
-  null, 
-  2001, 
-  3, 
-  '2023-10-23 16:00:00', 
-  78
-), (
-  null, 
-  2001, 
-  1, 
-  '2023-10-23 18:00:00', 
-  940
-), (
-  null, 
-  2001, 
-  2, 
-  '2023-10-23 18:00:00', 
-  94
-), (
-  null, 
-  2001, 
-  3, 
-  '2023-10-23 18:00:00', 
-  87
-);
-insert into tb_registro
-values (
-  null, 
-  2002, 
-  2, 
-  '2023-10-23 10:00:00', 
-  28
-), (
-  null, 
-  2002, 
-  3, 
-  '2023-10-23 10:00:00', 
-  39
-), (
-  null, 
-  2002, 
-  4, 
-  '2023-10-23 10:00:00', 
-  498
-), (
-  null, 
-  2002, 
-  2, 
-  '2023-10-23 12:00:00', 
-  14
-), (
-  null, 
-  2002, 
-  3, 
-  '2023-10-23 12:00:00', 
-  19
-), (
-  null, 
-  2002, 
-  4, 
-  '2023-10-23 12:00:00', 
-  499
-), (
-  null, 
-  2002, 
-  2, 
-  '2023-10-23 14:00:00', 
-  59
-), (
-  null, 
-  2002, 
-  3, 
-  '2023-10-23 14:00:00', 
-  78
-), (
-  null, 
-  2002, 
-  4, 
-  '2023-10-23 14:00:00', 
-  464
-), (
-  null, 
-  2002, 
-  2, 
-  '2023-10-23 16:00:00', 
-  85
-), (
-  null, 
-  2002, 
-  3, 
-  '2023-10-23 16:00:00', 
-  89
-), (
-  null, 
-  2002, 
-  4, 
-  '2023-10-23 16:00:00', 
-  421
-), (
-  null, 
-  2002, 
-  2, 
-  '2023-10-23 18:00:00', 
-  95
-), (
-  null, 
-  2002, 
-  3, 
-  '2023-10-23 18:00:00', 
-  93
-), (
-  null, 
-  2002, 
-  4, 
-  '2023-10-23 18:00:00', 
-  413
-);
-insert into tb_alerta
-values (
-  null, 
-  '2023-10-23 10:00:00', 
-  1, 
-  default, 
-  'CPU em 74% do funcionamento normal', 
-  2000
-), (
-  null, 
-  '2023-10-23 12:00:00', 
-  0, 
-  default, 
-  'RAM em 9% do funcionamento normal', 
-  2000
-), (
-  null, 
-  '2023-10-23 14:00:00', 
-  3, 
-  default, 
-  'CPU em 97% do funcionamento normal', 
-  2001
-), (
-  null, 
-  '2023-10-23 16:00:00', 
-  1, 
-  default, 
-  'CPU em 74% do funcionamento normal', 
-  2001
-), (
-  null, 
-  '2023-10-23 18:00:00', 
-  0, 
-  default, 
-  'RAM em 34% do funcionamento normal', 
-  2002
-);
-with
-  VALUE as (
-    select *
-    from tb_opcao
-  )
-insert into VALUE
-values (
-  null, 
-  100, 
-  500, 
-  30000
-);
-insert into tb_tag
-values (
-  null, 
-  'Principal', 
-  'F9C849'
-), (
-  null, 
-  'Backup', 
-  'F9C849'
-), (
-  null, 
-  'Em operação', 
-  '11EC2B'
-), (
-  null, 
-  'Em manutenção', 
-  'ECCC11'
-), (
-  null, 
-  'Fora de serviço', 
-  'C0241D'
-), (
-  null, 
-  'Ações', 
-  ''
-), (
-  null, 
-  'Clientes', 
-  ''
-), (
-  null, 
-  'Interno', 
-  '585858'
-);
-insert into tb_tag_servidor
-values (
-  2000, 
-  1
-), (
-  2000, 
-  3
-), (
-  2000, 
-  6
-), (
-  2001, 
-  4
-), (
-  2001, 
-  5
-), (
-  2002, 
-  2
-), (
-  2002, 
-  3
-), (
-  2002, 
-  6
-), (
-  2003, 
-  4
-), (
-  2003, 
-  5
-), (
-  2003, 
-  8
-), (
-  2004, 
-  2
-), (
-  2004, 
-  5
-), (
-  2005, 
-  5
-);
+
+INSERT INTO tb_monitorar (fk_servidor, fk_cat)
+VALUES 
+    (1, 1), (1, 2), 
+    (1, 3), (1, 4), 
+    (2, 1), (2, 2), 
+	(2, 3), (2, 4),
+    (3, 1), (3, 2),  
+    (3, 3), (3, 4), 
+	(4, 1), (4, 2), 
+    (4, 3), (4, 4), 
+	(5, 1), (5, 2),
+    (5, 3), (5, 4);
+
+INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
+VALUES
+(1, 5, '2023-11-29 19:59:59', 123),
+(2, 5, '2023-11-29 20:00:00', 456),
+(3, 5, '2023-11-29 20:00:01', 789),
+(1, 5, '2023-11-29 20:00:02', 234),
+(2, 5, '2023-11-29 20:00:03', 567),
+(3, 5, '2023-11-29 20:00:04', 890),
+(4, 6, '2023-11-29 20:00:05', 120),
+(5, 6, '2023-11-29 20:00:06', 341),
+(6, 6, '2023-11-29 20:00:07', 672),
+(1, 6, '2023-11-29 20:00:08', 993),
+(1, 6, '2023-11-29 20:00:09', 214),
+(2, 6, '2023-11-29 20:00:10', 455),
+(3, 6, '2023-11-29 20:00:11', 786);
+
+INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
+VALUES 
+  (1, 1, '2023-10-23 10:00:00', 204),
+  (1, 2, '2023-10-23 10:00:00', 23),
+  (1, 3, '2023-10-23 10:00:00', 34),
+  (1, 4, '2023-10-23 10:00:00', 499),
+  (1, 1, '2023-10-23 12:00:00', 84),
+  (1, 2, '2023-10-23 12:00:00', 5),
+  (1, 3, '2023-10-23 12:00:00', 21),
+  (1, 4, '2023-10-23 12:00:00', 487),
+  (1, 1, '2023-10-23 14:00:00', 402),
+  (1, 2, '2023-10-23 14:00:00', 67),
+  (1, 3, '2023-10-23 14:00:00', 58),
+  (1, 4, '2023-10-23 14:00:00', 439),
+  (1, 1, '2023-10-23 16:00:00', 694),
+  (1, 2, '2023-10-23 16:00:00', 72),
+  (1, 3, '2023-10-23 16:00:00', 85),
+  (1, 4, '2023-10-23 16:00:00', 402),
+  (1, 1, '2023-10-23 18:00:00', 1230),
+  (1, 2, '2023-10-23 18:00:00', 98),
+  (1, 3, '2023-10-23 18:00:00', 99),
+  (1, 4, '2023-10-23 18:00:00', 489);
+
+  INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
+VALUES 
+  (2, 1, '2023-10-23 10:00:00', 309),
+  (2, 2, '2023-10-23 10:00:00', 45),
+  (2, 3, '2023-10-23 10:00:00', 42),
+  (2, 1, '2023-10-23 12:00:00', 102),
+  (2, 2, '2023-10-23 12:00:00', 18),
+  (2, 3, '2023-10-23 12:00:00', 21),
+  (2, 1, '2023-10-23 14:00:00', 494),
+  (2, 2, '2023-10-23 14:00:00', 56),
+  (2, 3, '2023-10-23 14:00:00', 48),
+  (2, 1, '2023-10-23 16:00:00', 853),
+  (2, 2, '2023-10-23 16:00:00', 89),
+  (2, 3, '2023-10-23 16:00:00', 78),
+  (2, 1, '2023-10-23 18:00:00', 940),
+  (2, 2, '2023-10-23 18:00:00', 94),
+  (2, 3, '2023-10-23 18:00:00', 87);
+
+-- Inserção para fk_servidor = 3
+INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
+VALUES 
+  (3, 2, '2023-10-23 10:00:00', 28),
+  (3, 3, '2023-10-23 10:00:00', 39),
+  (3, 4, '2023-10-23 10:00:00', 498),
+  (3, 2, '2023-10-23 12:00:00', 14),
+  (3, 3, '2023-10-23 12:00:00', 19),
+  (3, 4, '2023-10-23 12:00:00', 499),
+  (3, 2, '2023-10-23 14:00:00', 59),
+  (3, 3, '2023-10-23 14:00:00', 78),
+  (3, 4, '2023-10-23 14:00:00', 464),
+  (3, 2, '2023-10-23 16:00:00', 85),
+  (3, 3, '2023-10-23 16:00:00', 89),
+  (3, 4, '2023-10-23 16:00:00', 421),
+  (3, 2, '2023-10-23 18:00:00', 95),
+  (3, 3, '2023-10-23 18:00:00', 93),
+  (3, 4, '2023-10-23 18:00:00', 413);
+
+INSERT INTO tb_alerta (data_hora, nivel_alerta, visualizado, descricao, fk_servidor)
+VALUES 
+  ('2023-10-23 10:00:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
+  ('2023-10-23 12:00:00', 0, 0, 'RAM em 9% do funcionamento normal', 1),
+  ('2023-10-23 14:00:00', 3, 0, 'CPU em 97% do funcionamento normal', 1),
+  ('2023-10-23 16:00:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
+  ('2023-10-23 18:00:00', 0, 0, 'RAM em 34% do funcionamento normal', 2);
+
+WITH VALUE AS (
+  SELECT
+    NULL AS id_opcao,
+    100 AS banda_larga,
+    500 AS taxa_de_transferencia,
+    30000 AS intervalo_atualizacao
+)
+INSERT INTO tb_opcao (banda_larga, taxa_de_transferência, intervalo_atualizacao)
+SELECT banda_larga, taxa_de_transferencia, intervalo_atualizacao
+FROM VALUE;
+
+INSERT INTO tb_tag (nome_tag, cor_tag)
+VALUES 
+  ('Principal', 'F9C849'),
+  ('Backup', 'F9C849'),
+  ('Em operação', '11EC2B'),
+  ('Em manutenção', 'ECCC11'),
+  ('Fora de serviço', 'C0241D'),
+  ('Ações', ''),
+  ('Clientes', ''),
+  ('Interno', '585858');
+
+INSERT INTO tb_tag_servidor
+VALUES 
+  (1, 1),
+  (1, 4),
+  (1, 6),
+  (2, 4),
+  (2, 5),
+  (3, 2),
+  (3, 4),
+  (3, 6),
+  (4, 4),
+  (4, 5),
+  (4, 8),
+  (5, 2),
+  (5, 5),
+  (6, 5);
