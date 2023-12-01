@@ -29,7 +29,7 @@ VALUES (
 INSERT INTO tb_funcionario
 VALUES (
   'Stephany Justino', 
-  'Gerente de operações', 
+  'Gerente de operaÃ§Ãµes', 
   '2005-06-13', 
   null, 
   'stephany@b3.com', 
@@ -91,7 +91,7 @@ VALUES (
   '%'
 ), (
   4, 
-  'Taxa de transferência', 
+  'Taxa de transferencia', 
   'MB/s'
 ), (
 	5,'Total da RAM', 'GB'
@@ -169,7 +169,7 @@ VALUES
   (2, 2, '2023-10-23 18:00:00', 94),
   (2, 3, '2023-10-23 18:00:00', 87);
 
--- Inserção para fk_servidor = 3
+-- Inserï¿½ï¿½o para fk_servidor = 3
 INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
 VALUES 
   (3, 2, '2023-10-23 10:00:00', 28),
@@ -203,7 +203,7 @@ WITH VALUE AS (
     500 AS taxa_de_transferencia,
     30000 AS intervalo_atualizacao
 )
-INSERT INTO tb_opcao (banda_larga, taxa_de_transferência, intervalo_atualizacao)
+INSERT INTO tb_opcao (banda_larga, taxa_de_transferencia, intervalo_atualizacao)
 SELECT banda_larga, taxa_de_transferencia, intervalo_atualizacao
 FROM VALUE;
 
@@ -211,10 +211,10 @@ INSERT INTO tb_tag (nome_tag, cor_tag)
 VALUES 
   ('Principal', 'F9C849'),
   ('Backup', 'F9C849'),
-  ('Em operação', '11EC2B'),
-  ('Em manutenção', 'ECCC11'),
-  ('Fora de serviço', 'C0241D'),
-  ('Ações', ''),
+  ('Em operaÃ§Ã£o', '11EC2B'),
+  ('Em manutenÃ§Ã£oo', 'ECCC11'),
+  ('Fora de serviÃ§o', 'C0241D'),
+  ('AÃ§Ãµes', ''),
   ('Clientes', ''),
   ('Interno', '585858');
 
