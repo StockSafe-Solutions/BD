@@ -52,7 +52,7 @@ CREATE TABLE tb_funcionario (
   CREATE TABLE tb_opcao (
     id_opcao INT IDENTITY(1, 1) NOT NULL,
     banda_larga SMALLINT DEFAULT 155,
-    taxa_de_transferência DECIMAL(10, 2) DEFAULT 1000.00,
+    taxa_de_transferencia DECIMAL(10, 2) DEFAULT 1000.00,
     INTervalo_atualizacao INT DEFAULT 60000,
     PRIMARY KEY (id_opcao)
   )
