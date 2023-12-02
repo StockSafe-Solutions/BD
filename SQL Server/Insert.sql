@@ -204,11 +204,16 @@ IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_alerta)
 BEGIN
 	INSERT INTO StockSafe.dbo.tb_alerta (data_hora, nivel_alerta, visualizado, descricao, fk_servidor)
 	VALUES 
-	  ('2023-10-23 10:00:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
-	  ('2023-10-23 12:00:00', 0, 0, 'RAM em 9% do funcionamento normal', 1),
-	  ('2023-10-23 14:00:00', 3, 0, 'CPU em 97% do funcionamento normal', 1),
-	  ('2023-10-23 16:00:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
-	  ('2023-10-23 18:00:00', 0, 0, 'RAM em 34% do funcionamento normal', 2);
+	  ('2023-11-03 16:45:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
+	  ('2023-11-06 12:00:00', 0, 0, 'RAM em 9% do funcionamento normal', 1),
+	  ('2023-11-12 14:40:00', 3, 0, 'CPU em 97% do funcionamento normal', 1),
+	  ('2023-11-18 16:01:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
+	  ('2023-11-20 18:00:00', 0, 0, 'RAM em 100% do funcionamento normal', 4),
+	  ('2023-11-24 16:35:00', 1, 0, 'CPU em 99% do funcionamento normal', 6),
+	  ('2023-11-25 12:00:00', 0, 0, 'RAM em 94% do funcionamento normal', 3),
+	  ('2023-11-25 10:00:00', 3, 0, 'CPU em 89% do funcionamento normal', 6),
+	  ('2023-11-29 16:00:00', 1, 0, 'CPU em 0% do funcionamento normal', 5),
+	  ('2023-11-30 09:00:00', 0, 0, 'RAM em 2% do funcionamento normal', 6);
 
 	WITH VALUE AS (
 	  SELECT
@@ -227,15 +232,15 @@ IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_tag)
 BEGIN
 	INSERT INTO StockSafe.dbo.tb_tag (nome_tag, cor_tag)
 	VALUES 
-	  ('Principal', 'F9C849'),
-	  ('Backup', 'F9C849'),
-	  ('Em operação', '11EC2B'),
-	  ('Em manutençãoo', 'ECCC11'),
-	  ('Fora de serviço', 'C0241D'),
-	  ('Ações', ''),
-	  ('Clientes', ''),
-	  ('Interno', '585858');
-END
+	  ('Principal', 'rgb(75, 181, 51)'),
+	  ('Backup', 'rgb(255, 225, 31)'),
+	  ('Em operação', 'rgb(7, 77, 85)'),
+	  ('Em manutençãoo', 'rgb(255, 46, 46)'),
+	  ('Fora de serviço', 'rgb(51, 51, 51)'),
+	  ('Ações', 'rgb(107, 107, 199)'),
+	  ('Clientes', 'rgb(92, 90, 66)'),
+	  ('Interno', 'rgb(92, 90, 66)');
+END;
 
 IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_tag_servidor)
 BEGIN

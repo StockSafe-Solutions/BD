@@ -78,7 +78,6 @@ END
     PRIMARY KEY (id_opcao)
   )
   
-  
   CREATE TABLE tb_alerta (
     id_alerta INT IDENTITY(1, 1) NOT NULL,
     data_hora DATETIME2 DEFAULT CURRENT_TIMESTAMP,
