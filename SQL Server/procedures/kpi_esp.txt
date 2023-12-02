@@ -1,0 +1,70 @@
+-- PARA PORTAR DE MySQL -> SQL Server
+
+-- Ajuste: Não há DELIMITER no SQL Server
+
+CREATE PROCEDURE sp_kpi_especifica
+    @taxa_atualizacao INT,
+    @pCodigo CHAR(6)
+AS
+BEGIN
+    -- Drop tables if they exist
+    IF OBJECT_ID('tempdb..#quantidade_registros') IS NOT NULL
+        DROP TABLE #quantidade_registros;
+    
+    IF OBJECT_ID('tempdb..#kpi_especifica') IS NOT NULL
+        DROP TABLE #kpi_especifica;
+
+    -- Create #quantidade_registros table
+    WITH t1 AS (
+        SELECT fk_servidor, COUNT(data_hora) AS qtd_registros
+        FROM vw_registro
+        GROUP BY fk_servidor
+    )
+    CREATE TABLE #quantidade_registros (
+        fk_servidor INT,
+        qtd_registros INT,
+        PRIMARY KEY (fk_servidor)
+    );
+
+    -- Insert data into #quantidade_registros
+    INSERT INTO #quantidade_registros
+    SELECT *
+    FROM t1;
+
+    -- Create #kpi_especifica table
+    CREATE TABLE #kpi_especifica (
+        id_servidor INT,
+        codigo CHAR(6),
+        kpi_uptime DECIMAL(10, 2),
+        kpi_taxa DECIMAL(10, 2),
+        base_taxa DECIMAL(10, 2),
+        kpi_pacotes_enviados INT,
+        kpi_armazenamento DECIMAL(10, 2),
+        base_armazenamento DECIMAL(10, 2),
+        PRIMARY KEY (id_servidor, codigo)
+    );
+
+    -- Insert data into #kpi_especifica
+    INSERT INTO #kpi_especifica
+    SELECT
+        s.id_servidor,
+        s.codigo,
+        AVG((qr.qtd_registros * 100.0) / (9.0 / @taxa_atualizacao)) AS kpi_uptime,
+        AVG(taxt.taxa_de_transferencia) AS kpi_taxa,
+        AVG(opt.taxa_de_transferencia) AS base_taxa,
+        SUM(pct.pacotes_enviados) AS kpi_pacotes_enviados,
+        AVG((s.armazenamento_usado * 100.0) / s.armazenamento_total) AS kpi_armazenamento,
+        AVG(s.armazenamento_total) AS base_armazenamento
+    FROM tb_servidor s
+    JOIN vw_taxa_de_transferencia taxt ON taxt.fk_servidor = s.id_servidor
+    JOIN tb_opcao opt ON opt.fk_servidor = s.id_servidor
+    JOIN vw_pacotes_enviados pct ON pct.fk_servidor = s.id_servidor
+    JOIN #quantidade_registros qr ON qr.fk_servidor = s.id_servidor
+    GROUP BY s.id_servidor, s.codigo, DAY(pct.data_hora)
+    ORDER BY s.id_servidor, s.codigo;
+
+    -- Select data from #kpi_especifica
+    SELECT *
+    FROM #kpi_especifica
+    WHERE codigo = @pCodigo;
+END;
