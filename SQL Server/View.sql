@@ -17,7 +17,7 @@ CREATE OR ALTER VIEW vw_registro AS
 		fk_servidor,
 		data_hora,
 		MAX(CASE WHEN tipo_cat = 'Pacotes enviados' THEN media END) AS pacotes_enviados,
-		MAX(CASE WHEN tipo_cat = 'Taxa de transferência' THEN media END) AS taxa_de_transferencia,
+		MAX(CASE WHEN tipo_cat = 'Taxa de transferencia' THEN media END) AS taxa_de_transferencia,
 		MAX(CASE WHEN tipo_cat = 'Uso da CPU' THEN media END) AS uso_da_cpu,
 		MAX(CASE WHEN tipo_cat = 'Uso da RAM' THEN media END) AS uso_da_ram,
 		MAX(CASE WHEN tipo_cat = 'Total da RAM' THEN media END) AS total_da_ram,
