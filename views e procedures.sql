@@ -1,5 +1,4 @@
 -- SESSÃO DAS VIEWS
-
 -- VIEWS MESTRAS
 CREATE OR REPLACE VIEW vw_base_registros AS
 	SELECT 
