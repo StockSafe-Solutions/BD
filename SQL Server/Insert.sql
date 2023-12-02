@@ -1,4 +1,5 @@
 USE StockSafe;
+
 INSERT INTO tb_funcionario
 VALUES (
   'Danilo Marques', 
@@ -234,3 +235,5 @@ VALUES
   (5, 2),
   (5, 5),
   (6, 5);
+
+  select * from tb_servidor;
