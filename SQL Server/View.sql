@@ -1,7 +1,7 @@
 USE StockSafe;
 
 GO
-CREATE OR ALTER VIEW vw_base_registros AS
+CREATE OR ALTER VIEW vw_base_r	egistros AS
     SELECT 
         r.fk_servidor,
         data_hora,
