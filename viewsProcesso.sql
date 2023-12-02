@@ -1,21 +1,25 @@
--- ================================================== SELECTS PARA OS PROCESSOS
--- Pra tabela web
-SELECT *
-FROM tb_processo
-WHERE DATE_FORMAT(data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
--- ORDER BY ${filtro};
-
 SELECT * FROM tb_processo;
-
+-- TODO: Traduzir views para dialeto SQL SERVER
+-- ================================================== SELECTS PARA OS PROCESSOS
+-- Pra tabela web (INICIAL)
 SELECT proc.*,
 serv.codigo
-FROM tb_processo as proc
-JOIN tb_servidor as serv
+FROM tb_processo AS proc
+JOIN tb_servidor AS serv
 ON proc.fk_servidor = serv.id_servidor
--- WHERE serv.codigo = 'SVJW32'
-ORDER BY nome_proc;
+WHERE serv.codigo = 'SVJW32' 
+AND DATE_FORMAT(data_hora, '%Y-%m-%d %H') = DATE_FORMAT(NOW(), '%Y-%m-%d %H')
+ORDER BY proc.nome_proc;
+-- Ambos o CODIGO do servidor e o ORDER BY serão parametros no MODELS
+
+-- PARA TESTE
+SELECT proc.*, serv.codigo
+FROM tb_processo AS proc
+JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
+WHERE serv.codigo = 'SVJW32' ORDER BY nome_proc;
 
 -- ===================================================== Pro gráfico
+-- GRÁFICO INICIAL
 SELECT proc.nome_proc AS nome, 
 COUNT(proc.nome_proc) AS quantidade,
 serv.codigo AS codigo
@@ -23,12 +27,15 @@ FROM tb_processo AS proc
 JOIN tb_servidor AS serv
 ON proc.fk_servidor = serv.id_servidor
 WHERE codigo = 'SVJW32'
+AND DATE_FORMAT(proc.data_hora, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
 GROUP BY nome_proc,
 codigo
 ORDER BY quantidade DESC LIMIT 5;
+-- A Data do select é um parametro no MODEL
 
 -- ======================================================= Pras kpis
 -- Maior consumidor de CPU
+/*
 CREATE OR REPLACE VIEW vw_maior_uso_cpu AS
 SELECT 
     nome_proc AS nome_cpu,
@@ -39,8 +46,6 @@ FROM tb_processo AS proc
 JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
 GROUP BY proc.fk_servidor, nome_cpu
 ORDER BY proc.fk_servidor, proc_total_cpu DESC;
-
-SELECT * FROM vw_maior_uso_cpu;
 
 -- Maior consumidor de RAM
 CREATE OR REPLACE VIEW vw_maior_uso_ram AS
@@ -53,8 +58,6 @@ FROM tb_processo AS proc
 JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
 GROUP BY proc.fk_servidor, nome_ram
 ORDER BY proc.fk_servidor, proc_total_ram DESC;
-
-SELECT * FROM vw_maior_uso_ram;
 
 -- Uso total de CPU e RAM
 CREATE OR REPLACE VIEW vw_uso_proc_atual AS
@@ -69,8 +72,6 @@ JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
 GROUP BY proc.fk_servidor, serv.codigo
 ORDER BY proc.fk_servidor, rn;
 
-SELECT * FROM vw_uso_proc_atual;
-
 CREATE OR REPLACE VIEW vw_proc_kpi AS
 SELECT 
     uso_cpu.nome_cpu, 
@@ -84,11 +85,11 @@ JOIN vw_uso_proc_atual AS uso_atual ON uso_cpu.fk_servidor = uso_atual.fk_servid
 JOIN tb_servidor AS serv ON uso_atual.fk_servidor = serv.id_servidor
 WHERE uso_cpu.rn = 1;
 
-
 SELECT * FROM vw_proc_kpi;
 
 SELECT * FROM vw_proc_kpi WHERE codigo = 'SVJW32';
 SELECT * FROM vw_proc_kpi WHERE codigo = 'B7WGPJ';
+*/
 
 -- =================================================== Com o horário em consideração
 -- Maior consumidor de CPU atual
@@ -100,7 +101,7 @@ SELECT
     ROW_NUMBER() OVER (PARTITION BY proc.fk_servidor ORDER BY SUM(proc.uso_cpu) DESC) AS rn
 FROM tb_processo AS proc
 JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
-WHERE DATE_FORMAT(proc.data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i')
+WHERE proc.data_hora >= NOW() - INTERVAL 1 MINUTE
 GROUP BY proc.fk_servidor, nome_cpu
 ORDER BY proc.fk_servidor, proc_total_cpu DESC;
 
@@ -113,7 +114,7 @@ SELECT
     ROW_NUMBER() OVER (PARTITION BY proc.fk_servidor ORDER BY SUM(uso_ram) DESC) AS rn
 FROM tb_processo AS proc
 JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
-WHERE DATE_FORMAT(proc.data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i')
+WHERE proc.data_hora >= NOW() - INTERVAL 1 MINUTE
 GROUP BY proc.fk_servidor, nome_ram
 ORDER BY proc.fk_servidor, proc_total_ram DESC;
 
@@ -128,10 +129,9 @@ SELECT
     MAX(proc.data_hora) AS data_hora
 FROM tb_processo AS proc
 JOIN tb_servidor AS serv ON proc.fk_servidor = serv.id_servidor
-WHERE DATE_FORMAT(proc.data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i')
+WHERE proc.data_hora >= NOW() - INTERVAL 1 MINUTE
 GROUP BY proc.fk_servidor, serv.codigo
 ORDER BY proc.fk_servidor, rn;
-
 
 CREATE OR REPLACE VIEW vw_proc_kpi AS
 SELECT 
@@ -145,7 +145,8 @@ JOIN vw_maior_uso_ram AS uso_ram ON uso_cpu.fk_servidor = uso_ram.fk_servidor AN
 JOIN vw_uso_proc_atual AS uso_atual ON uso_cpu.fk_servidor = uso_atual.fk_servidor AND uso_cpu.rn = uso_atual.rn
 JOIN tb_servidor AS serv ON uso_atual.fk_servidor = serv.id_servidor
 WHERE uso_cpu.rn = 1
-AND DATE_FORMAT(uso_atual.data_hora, '%Y-%m-%d %H:%i') = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i');
+AND uso_atual.data_hora >= NOW() - INTERVAL 1 MINUTE;
+
 
 SELECT * FROM vw_proc_kpi WHERE codigo = 'SVJW32';
 SELECT * FROM vw_proc_kpi WHERE codigo = 'B7WGPJ';
