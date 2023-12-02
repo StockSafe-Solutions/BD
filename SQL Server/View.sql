@@ -1,7 +1,7 @@
 USE StockSafe;
 
 GO
-CREATE OR ALTER VIEW vw_base_r	egistros AS
+CREATE OR ALTER VIEW vw_base_registros AS
     SELECT 
         r.fk_servidor,
         data_hora,
@@ -30,7 +30,7 @@ CREATE OR ALTER VIEW vw_servidor
 	AS
 	SELECT
 	s.*,
-		FORMAT(data_hora, 'dd/MMMM/yyyy', 'pt-BR') AS 'ultimaData',
+		FORMAT(data_hora, 'dd m., yyyy', 'pt-BR') AS 'ultimaData',
 		FORMAT(data_hora, 'HH:mm', 'pt-BR') AS 'ultimoHorario'
 	FROM tb_servidor s
 	LEFT OUTER JOIN (
