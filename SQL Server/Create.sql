@@ -1,4 +1,3 @@
--- DROP DATABASE StockSafe;
 IF NOT EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = 'StockSafe')
     CREATE DATABASE StockSafe;
 GO

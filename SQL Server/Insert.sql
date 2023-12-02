@@ -1,50 +1,40 @@
-USE StockSafe;
+INSERT INTO dbo.tb_funcionario
+VALUES (
+	'Danilo Marques', 
+	'Analista', 
+	'2005-07-11', 
+	null, 
+	'danilo@b3.com', 
+	'urubu100'
+	), (
+	'Gustavo Pereira',
+	'Analista',
+	'2005-06-13',
+	null,
+	'gustavo@b3.com',
+	'urubu100'
+	), (
+	'Gabriel Bazante',
+	'Gerente de infraestrutura',
+	'2005-06-13',
+	null,
+	'gabriel@b3.com',
+	'urubu100'
+	), ('Stephany Justino',
+	'Gerente de operações',
+	'2005-06-13',
+	null,
+	'stephany@b3.com',
+	'urubu100'
+	), ('Rafael Rocha',
+	'COO',
+	'2005-06-13',
+	null,
+	'rafael@b3.com',
+	'urubu100'
+	);
 
-INSERT INTO tb_funcionario
-VALUES (
-  'Danilo Marques', 
-  'Analista', 
-  '2005-07-11', 
-  null, 
-  'danilo@b3.com', 
-  'urubu100'
-);
-INSERT INTO tb_funcionario
-VALUES (
-  'Gustavo Pereira', 
-  'Analista', 
-  '2005-06-13', 
-  null, 
-  'gustavo@b3.com', 
-  'urubu100'
-);
-INSERT INTO tb_funcionario
-VALUES (
-  'Gabriel Bazante', 
-  'Gerente de infraestrutura', 
-  '2005-06-13', 
-  null, 
-  'gabriel@b3.com', 
-  'urubu100'
-);
-INSERT INTO tb_funcionario
-VALUES (
-  'Stephany Justino', 
-  'Gerente de operações', 
-  '2005-06-13', 
-  null, 
-  'stephany@b3.com', 
-  'urubu100'
-);
-INSERT INTO tb_funcionario
-VALUES (
-  'Rafael Rocha', 
-  'COO', 
-  '2005-06-13', 
-  null, 
-  'rafael@b3.com', 
-  'urubu100'
-);
+
 INSERT INTO tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador)
 VALUES (
   'SVJW32', 
@@ -77,6 +67,7 @@ VALUES (
   CAST(300.3 AS NUMERIC), 
   null
 );
+
 INSERT INTO tb_categoria
 VALUES (
   1, 
@@ -95,9 +86,13 @@ VALUES (
   'Taxa de transferencia', 
   'MB/s'
 ), (
-	5,'Total da RAM', 'GB'
+	5,
+	'Total da RAM',
+	'GB'
 ), (
-	6, 'Uso disponivel da RAM', '%'
+	6,
+	'Uso disponivel da RAM',
+	'%'
 );
 
 INSERT INTO tb_monitorar (fk_servidor, fk_cat)
@@ -152,7 +147,7 @@ VALUES
   (1, 3, '2023-10-23 18:00:00', 99),
   (1, 4, '2023-10-23 18:00:00', 489);
 
-  INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
+INSERT INTO tb_registro (fk_servidor, fk_cat, data_hora, valor)
 VALUES 
   (2, 1, '2023-10-23 10:00:00', 309),
   (2, 2, '2023-10-23 10:00:00', 45),
@@ -204,6 +199,7 @@ WITH VALUE AS (
     500 AS taxa_de_transferencia,
     30000 AS intervalo_atualizacao
 )
+
 INSERT INTO tb_opcao (banda_larga, taxa_de_transferencia, intervalo_atualizacao)
 SELECT banda_larga, taxa_de_transferencia, intervalo_atualizacao
 FROM VALUE;
@@ -235,5 +231,3 @@ VALUES
   (5, 2),
   (5, 5),
   (6, 5);
-
-  select * from tb_servidor;
