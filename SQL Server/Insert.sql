@@ -1,6 +1,6 @@
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_funcionario)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_funcionario)
 BEGIN
-	INSERT INTO dbo.tb_funcionario
+	INSERT INTO StockSafe.dbo.tb_funcionario
 	VALUES (
 		'Danilo Marques', 
 		'Analista', 
@@ -39,9 +39,9 @@ BEGIN
 		);
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_servidor)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_servidor)
 BEGIN
-	INSERT INTO dbo.tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador)
+	INSERT INTO StockSafe.dbo.tb_servidor (codigo, armazenamento_total, armazenamento_usado, id_autenticador)
 	VALUES (
 	  'SVJW32', 
 	  CAST(500.5 AS NUMERIC), 
@@ -75,9 +75,9 @@ BEGIN
 	);
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_categoria)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_categoria)
 BEGIN
-	INSERT INTO dbo.tb_categoria
+	INSERT INTO StockSafe.dbo.tb_categoria
 	VALUES (
 	  1, 
 	  'Pacotes enviados', 
@@ -105,9 +105,9 @@ BEGIN
 	);
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_monitorar)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_monitorar)
 BEGIN
-	INSERT INTO dbo.tb_monitorar (fk_servidor, fk_cat)
+	INSERT INTO StockSafe.dbo.tb_monitorar (fk_servidor, fk_cat)
 	VALUES 
 		(1, 1), (1, 2), 
 		(1, 3), (1, 4), 
@@ -121,9 +121,9 @@ BEGIN
 		(5, 3), (5, 4);
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_registro)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_registro)
 BEGIN
-	INSERT INTO dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
+	INSERT INTO StockSafe.dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
 	VALUES
 	(1, 5, '2023-11-29 19:59:59', 123),
 	(2, 5, '2023-11-29 20:00:00', 456),
@@ -139,7 +139,7 @@ BEGIN
 	(2, 6, '2023-11-29 20:00:10', 455),
 	(3, 6, '2023-11-29 20:00:11', 786);
 
-	INSERT INTO dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
+	INSERT INTO StockSafe.dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
 	VALUES 
 	  (1, 1, '2023-10-23 10:00:00', 204),
 	  (1, 2, '2023-10-23 10:00:00', 23),
@@ -162,7 +162,7 @@ BEGIN
 	  (1, 3, '2023-10-23 18:00:00', 99),
 	  (1, 4, '2023-10-23 18:00:00', 489);
 
-	INSERT INTO dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
+	INSERT INTO StockSafe.dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
 	VALUES 
 	  (2, 1, '2023-10-23 10:00:00', 309),
 	  (2, 2, '2023-10-23 10:00:00', 45),
@@ -181,7 +181,7 @@ BEGIN
 	  (2, 3, '2023-10-23 18:00:00', 87);
 
 	-- Inser��o para fk_servidor = 3
-	INSERT INTO dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
+	INSERT INTO StockSafe.dbo.tb_registro (fk_servidor, fk_cat, data_hora, valor)
 	VALUES 
 	  (3, 2, '2023-10-23 10:00:00', 28),
 	  (3, 3, '2023-10-23 10:00:00', 39),
@@ -200,9 +200,9 @@ BEGIN
 	  (3, 4, '2023-10-23 18:00:00', 413);
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_alerta)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_alerta)
 BEGIN
-	INSERT INTO dbo.tb_alerta (data_hora, nivel_alerta, visualizado, descricao, fk_servidor)
+	INSERT INTO StockSafe.dbo.tb_alerta (data_hora, nivel_alerta, visualizado, descricao, fk_servidor)
 	VALUES 
 	  ('2023-10-23 10:00:00', 1, 0, 'CPU em 74% do funcionamento normal', 1),
 	  ('2023-10-23 12:00:00', 0, 0, 'RAM em 9% do funcionamento normal', 1),
@@ -218,14 +218,14 @@ BEGIN
 		30000 AS intervalo_atualizacao
 	)
 
-	INSERT INTO dbo.tb_opcao (banda_larga, taxa_de_transferencia, intervalo_atualizacao)
+	INSERT INTO StockSafe.dbo.tb_opcao (banda_larga, taxa_de_transferencia, intervalo_atualizacao)
 	SELECT banda_larga, taxa_de_transferencia, intervalo_atualizacao
 	FROM VALUE;
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_tag)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_tag)
 BEGIN
-	INSERT INTO dbo.tb_tag (nome_tag, cor_tag)
+	INSERT INTO StockSafe.dbo.tb_tag (nome_tag, cor_tag)
 	VALUES 
 	  ('Principal', 'F9C849'),
 	  ('Backup', 'F9C849'),
@@ -237,9 +237,9 @@ BEGIN
 	  ('Interno', '585858');
 END
 
-IF NOT EXISTS (SELECT 1 FROM dbo.tb_tag_servidor)
+IF NOT EXISTS (SELECT 1 FROM StockSafe.dbo.tb_tag_servidor)
 BEGIN
-	INSERT INTO dbo.tb_tag_servidor
+	INSERT INTO StockSafe.dbo.tb_tag_servidor
 	VALUES 
 	  (1, 1),
 	  (1, 4),
