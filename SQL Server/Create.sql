@@ -70,33 +70,25 @@ BEGIN
 END
 
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_opcao')
-BEGIN
-	CREATE TABLE dbo.tb_opcao (
-		id_opcao INT IDENTITY(1, 1) NOT NULL,
-		banda_larga SMALLINT DEFAULT 155,
-		taxa_de_transferencia DECIMAL(10, 2) DEFAULT 1000.00,
-		INTervalo_atualizacao INT DEFAULT 60000,
-		PRIMARY KEY (id_opcao)
-	)
-END
-
- 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_alerta')
-BEGIN
-	CREATE TABLE dbo.tb_alerta (
-		id_alerta INT IDENTITY(1, 1) NOT NULL,
-		data_hora DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-		nivel_alerta TINYINT NOT NULL,
-		visualizado BIT DEFAULT 0,
-		descricao VARCHAR(250) NOT NULL,
-		fk_servidor INT NOT NULL,
-		FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
-		CHECK (nivel_alerta in (0, 1, 2, 3)),
-		PRIMARY KEY (id_alerta)
-	)
-END
-
+  CREATE TABLE tb_opcao (
+    id_opcao INT IDENTITY(1, 1) NOT NULL,
+    banda_larga SMALLINT DEFAULT 155,
+    taxa_de_transferencia DECIMAL(10, 2) DEFAULT 1000.00,
+    intervalo_atualizacao INT DEFAULT 60000,
+    PRIMARY KEY (id_opcao)
+  )
+  
+  CREATE TABLE tb_alerta (
+    id_alerta INT IDENTITY(1, 1) NOT NULL,
+    data_hora DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+    nivel_alerta TINYINT NOT NULL,
+    visualizado BIT DEFAULT 0,
+    descricao VARCHAR(250) NOT NULL,
+    fk_servidor INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
+    CHECK (nivel_alerta in (0, 1, 2, 3)),
+    PRIMARY KEY (id_alerta)
+  )
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_tag')
 BEGIN
