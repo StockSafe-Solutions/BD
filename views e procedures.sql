@@ -20,10 +20,10 @@ SELECT
                 '\'')) -- Listando todas as colunas e criando um case para cada uma
 INTO @executor FROM vw_base_registros; -- Aqui vem o nome da sua view!
 SET @executor = CONCAT('
+	CREATE OR REPLACE VIEW vw_registro AS
 	SELECT fk_servidor, data_hora, ', @executor, '
 	FROM vw_base_registros
 	GROUP BY fk_servidor, data_hora');
-SELECT (@executor);
 PREPARE criarView FROM @executor;
 EXECUTE criarView; 
 
@@ -34,15 +34,14 @@ CREATE OR REPLACE VIEW vw_servidor AS
 	SELECT 
 	s.*,
 	DATE_FORMAT(d.data_hora,"%d/%m/%Y") as ultimaData,
-	DATE_FORMAT(d.data_hora,"%H:%i") as ultimoHorario,
-    COUNT(fk_tag) as qtdTags
+	DATE_FORMAT(d.data_hora,"%H:%i") as ultimoHorario
 		FROM tb_servidor AS s
 		LEFT JOIN(SELECT fk_servidor, max(data_hora) as data_hora 
 					FROM vw_registro GROUP BY fk_servidor) AS d
-					ON s.id_servidor = d.fk_servidor
-		LEFT JOIN tb_tag_servidor AS ts ON s.id_servidor = ts.fk_servidor
-        GROUP BY s.id_servidor;
-        
+		ON s.id_servidor = d.fk_servidor;
+
+SELECT * FROM vw_servidor;
+
 -- -------------------------------------------------------------------- Gráficos
 -- VIEW CPU
 CREATE OR REPLACE VIEW vw_cpu AS
@@ -210,6 +209,3 @@ END //
 DELIMITER ;
 
 CALL sp_kpi_geral(1);
-
-
-
