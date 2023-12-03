@@ -3,13 +3,13 @@ SELECT * FROM tb_processo;
 -- ================================================== SELECTS PARA OS PROCESSOS
 -- Pra tabela web (INICIAL)
 SELECT proc.*,
-serv.codigo
-FROM tb_processo AS proc
-JOIN tb_servidor AS serv
-ON proc.fk_servidor = serv.id_servidor
-WHERE serv.codigo = 'SVJW32' 
-AND DATE_FORMAT(data_hora, '%Y-%m-%d %H') = DATE_FORMAT(NOW(), '%Y-%m-%d %H')
-ORDER BY proc.nome_proc;
+    serv.codigo
+    FROM tb_processo AS proc
+    JOIN tb_servidor AS serv 
+    ON proc.fk_servidor = serv.id_servidor
+    WHERE serv.codigo = 'SVJW32' 
+    AND data_hora >= NOW() - INTERVAL 1 MINUTE
+    ORDER BY proc.nome_proc;
 -- Ambos o CODIGO do servidor e o ORDER BY serão parametros no MODELS
 
 -- PARA TESTE
