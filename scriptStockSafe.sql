@@ -30,14 +30,16 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
     ) 
     AUTO_INCREMENT = 2000;
-
+select * from tb_servidor;
 CREATE TABLE IF NOT EXISTS tb_categoria(
 	id_cat INT NOT NULL,
     tipo_cat VARCHAR(45) NOT NULL,
     unidade_cat VARCHAR(25),
     PRIMARY KEY (id_cat)
 	);
+DESC tb_categoria;
 
+            
 CREATE TABLE IF NOT EXISTS tb_monitorar(
 	fk_servidor INT NOT NULL,
     fk_cat INT NOT NULL,
@@ -67,12 +69,13 @@ CREATE TABLE IF NOT EXISTS tb_opcao (
   
 CREATE TABLE IF NOT EXISTS tb_alerta (
 	id_alerta INT NOT NULL AUTO_INCREMENT,
-	data_hora DATETIME DEFAULT(now()),
+	data_hora DATETIME DEFAULT now(),
     nivel_alerta TINYINT NOT NULL,
-    visualizado BOOLEAN DEFAULT(0),
+    visualizado BOOLEAN DEFAULT 0,
 	descricao VARCHAR(250) NOT NULL,
     fk_servidor INT NOT NULL,
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
     CHECK (nivel_alerta IN (0,1,2,3)),
     PRIMARY KEY (id_alerta)
     );
+    

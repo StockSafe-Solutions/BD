@@ -12,6 +12,7 @@ CREATE OR REPLACE VIEW vw_base_registros AS
 			GROUP BY fk_servidor, data_hora, c.id_cat;
             
 SET @executor = NULL;
+select * from vw_base_registros;
 SELECT
     GROUP_CONCAT(DISTINCT CONCAT('max(case when tipo_cat = \'',
                 tipo_cat,'\' then media end) \'',
@@ -27,6 +28,7 @@ PREPARE criarView FROM @executor;
 EXECUTE criarView; 
 
 SELECT * FROM vw_registro;
+SELECT data_hora FROM vw_registro;
 -- VIEW DOS SERVIDORES
 CREATE OR REPLACE VIEW vw_servidor AS
 	SELECT 
@@ -58,18 +60,13 @@ CREATE OR REPLACE VIEW vw_cpu_geral AS
 SELECT * FROM vw_cpu_geral;
 
 -- RAM        
+
 CREATE OR REPLACE VIEW vw_ram AS
-	SELECT fk_servidor, avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
+	SELECT fk_servidor,round( avg(uso_da_ram)) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados
     FROM vw_registro
 	GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i'), fk_servidor;
-
 SELECT * FROM vw_ram;
-
-CREATE OR REPLACE VIEW vw_ram_geral AS
-	SELECT avg(uso_da_ram) as uso_da_ram, DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i') AS dataDados FROM vw_registro
-		GROUP BY DATE_FORMAT(data_hora, '%Y-%m-%d %h:%i');
-
-SELECT * FROM vw_ram_geral;
+-- RAM
 
 -- -------------------------------------------------------------------- KPI
 -- Taxa de Transferencia
@@ -151,22 +148,22 @@ DELIMITER ;
 
 call sp_uso_banda_larga();
 
-DROP PROCEDURE IF EXISTS sp_kpi_geral;	
+	DROP PROCEDURE IF EXISTS sp_kpi_geral;	
 
-DELIMITER //
-CREATE PROCEDURE sp_kpi_geral(IN taxa_atualizacao INT)
-BEGIN
-	DECLARE limite INT;
-    SET limite = (select count(id_servidor) from tb_servidor);
+	DELIMITER //
+	CREATE PROCEDURE sp_kpi_geral(IN taxa_atualizacao INT)
+	BEGIN
+		DECLARE limite INT;
+		SET limite = (select count(id_servidor) from tb_servidor);
 
-    DROP TABLE IF EXISTS quantidade_registros;
-    DROP TABLE IF EXISTS kpi_especifica;
-    DROP TABLE IF EXISTS banda_larga;
-	DROP TABLE IF EXISTS kpi_geral;
-	
-	CREATE TEMPORARY TABLE quantidade_registros (
-		select fk_servidor, count(data_hora) as qtd_registros from vw_registro group by fk_servidor
-    );
+		DROP TABLE IF EXISTS quantidade_registros;
+		DROP TABLE IF EXISTS kpi_especifica;
+		DROP TABLE IF EXISTS banda_larga;
+		DROP TABLE IF EXISTS kpi_geral;
+		
+		CREATE TEMPORARY TABLE quantidade_registros (
+			select fk_servidor, count(data_hora) as qtd_registros from vw_registro group by fk_servidor
+		);
 	    
     CREATE TEMPORARY TABLE kpi_especifica(
 		
@@ -213,3 +210,6 @@ END //
 DELIMITER ;
 
 CALL sp_kpi_geral(1);
+
+
+

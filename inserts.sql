@@ -19,6 +19,12 @@ INSERT INTO tb_categoria VALUES
 		(2, "Uso da CPU", "%"),
 		(3, "Uso da RAM", "%"),
 		(4, "Taxa de transferência", "MB/s");
+        
+        
+INSERT INTO tb_categoria VALUES (5, "Total da RAM", "GB"),
+								(6, "Uso disponivel da RAM", "%");
+
+SELECT * FROM tb_categoria;
 
 INSERT INTO tb_monitorar VALUES 
 		(2000,1),(2000,2),(2000,3),(2000,4),
@@ -33,7 +39,7 @@ INSERT INTO tb_registro VALUES
 		(null, 2000, 2, '2023-10-23 10:00:00', 23),
 		(null, 2000, 3, '2023-10-23 10:00:00', 34),
 		(null, 2000, 4, '2023-10-23 10:00:00', 499),
-        
+        (null, 2000, 3, '2023-10-23 15:00:00', 99),
         (null, 2000, 1, '2023-10-23 12:00:00', 84),
 		(null, 2000, 2, '2023-10-23 12:00:00', 5),
 		(null, 2000, 3, '2023-10-23 12:00:00', 21),
@@ -95,7 +101,7 @@ INSERT INTO tb_registro VALUES
         (null, 2002, 2, '2023-10-23 18:00:00', 95),
 		(null, 2002, 3, '2023-10-23 18:00:00', 93),
 		(null, 2002, 4, '2023-10-23 18:00:00', 413);
-        
+
 INSERT INTO tb_alerta VALUES
  (NULL,'2023-10-23 10:00:00',1,default,'CPU em 74% do funcionamento normal', 2000),
  (NULL,'2023-10-23 12:00:00',0,default,'RAM em 9% do funcionamento normal', 2000),
