@@ -20,10 +20,10 @@ SELECT
                 '\'')) -- Listando todas as colunas e criando um case para cada uma
 INTO @executor FROM vw_base_registros; -- Aqui vem o nome da sua view!
 SET @executor = CONCAT('
-	CREATE OR REPLACE VIEW vw_registro AS
 	SELECT fk_servidor, data_hora, ', @executor, '
 	FROM vw_base_registros
 	GROUP BY fk_servidor, data_hora');
+SELECT (@executor);
 PREPARE criarView FROM @executor;
 EXECUTE criarView; 
 

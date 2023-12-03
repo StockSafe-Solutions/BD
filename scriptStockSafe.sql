@@ -78,4 +78,3 @@ CREATE TABLE IF NOT EXISTS tb_alerta (
     CHECK (nivel_alerta IN (0,1,2,3)),
     PRIMARY KEY (id_alerta)
     );
-    

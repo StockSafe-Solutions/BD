@@ -19,13 +19,11 @@ INSERT INTO tb_categoria VALUES
 		(2, "Uso da CPU", "%"),
 		(3, "Uso da RAM", "%"),
 		(4, "Taxa de transferência", "MB/s");
-        
-        
-INSERT INTO tb_categoria VALUES (5, "Total da RAM", "GB"),
-								(6, "Uso disponivel da RAM", "%");
 
-SELECT * FROM tb_categoria;
-
+INSERT INTO tb_categoria VALUES 
+	(5, "Total da RAM", "GB"),
+	(6, "Uso disponivel da RAM", "%");
+	
 INSERT INTO tb_monitorar VALUES 
 		(2000,1),(2000,2),(2000,3),(2000,4),
 		(2001,1),(2001,2),(2001,3),
@@ -110,3 +108,29 @@ INSERT INTO tb_alerta VALUES
  (NULL,'2023-10-23 18:00:00',0,default,'RAM em 34% do funcionamento normal', 2002);
         
 INSERT INTO tb_opcao VALUE (NULL, 100, 500, 30000);
+
+INSERT INTO tb_tag VALUES
+  (NULL, 'Principal', 'F9C849'),
+  (NULL, 'Backup', 'F9C849'),
+  (NULL, 'Em operação', '11EC2B'),
+  (NULL, 'Em manutenção', 'ECCC11'),
+  (NULL, 'Fora de serviço', 'C0241D'),
+  (NULL, 'Ações', ''),
+  (NULL, 'Clientes', ''),
+  (NULL, 'Interno', '585858');
+  
+INSERT INTO tb_tag_servidor VALUES
+	(2000, 1),
+	(2000, 3),
+	(2000, 6),
+	(2001, 4),
+	(2001, 5),
+	(2002, 2),
+	(2002, 3),
+	(2002, 6),
+	(2003, 4),
+	(2003, 5),
+	(2003, 8),
+	(2004, 2),
+	(2004, 5),
+	(2005, 5);
