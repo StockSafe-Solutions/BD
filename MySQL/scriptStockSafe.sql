@@ -28,8 +28,7 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   id_autenticador INT,
   PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
-    ) 
-    AUTO_INCREMENT = 2000;
+    );
 
 CREATE TABLE IF NOT EXISTS tb_categoria(
 	id_cat INT NOT NULL,
@@ -51,7 +50,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   fk_servidor INT NOT NULL,
   fk_cat INT NOT NULL,
   data_hora DATETIME DEFAULT(now()),
-  valor DECIMAL(8,2) NOT NULL,
+  valor DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_registro, fk_servidor,fk_cat),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
   FOREIGN KEY (fk_cat) REFERENCES tb_categoria (id_cat)

@@ -69,7 +69,8 @@ BEGIN
 	)
 END
 
-
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_opcao')
+BEGIN
   CREATE TABLE tb_opcao (
     id_opcao INT IDENTITY(1, 1) NOT NULL,
     banda_larga SMALLINT DEFAULT 155,
@@ -77,7 +78,10 @@ END
     intervalo_atualizacao INT DEFAULT 60000,
     PRIMARY KEY (id_opcao)
   )
+END
   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_alerta')
+BEGIN
   CREATE TABLE tb_alerta (
     id_alerta INT IDENTITY(1, 1) NOT NULL,
     data_hora DATETIME2 DEFAULT CURRENT_TIMESTAMP,
@@ -89,18 +93,18 @@ END
     CHECK (nivel_alerta in (0, 1, 2, 3)),
     PRIMARY KEY (id_alerta)
   )
+END
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_tag')
 BEGIN
 	CREATE TABLE dbo.tb_tag (
 		id_tag INT IDENTITY(1, 1) NOT NULL,
 		nome_tag VARCHAR(75) NOT NULL,
-		cor_tag CHAR(6) NOT NULL,
+		cor_tag VARCHAR(18) NOT NULL,
 		UNIQUE (nome_tag),
 		PRIMARY KEY (id_tag)
 	);
 END
-
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_tag_servidor')
 BEGIN
@@ -111,4 +115,22 @@ BEGIN
 		FOREIGN KEY (fk_tag) REFERENCES tb_tag (id_tag),
 		PRIMARY KEY (fk_servidor, fk_tag)
 	);
+END
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_processo')
+BEGIN
+	CREATE TABLE dbo.tb_processo (
+    id_proc INT NOT NULL IDENTITY(1,1),
+    pid_proc INT NOT NULL,
+    nome_proc VARCHAR(100),
+    data_hora DATETIME DEFAULT(GETDATE()),
+    uso_cpu DECIMAL(5,2) NOT NULL,
+    uso_ram DECIMAL(5,2) NOT NULL,
+    uso_bytes_mb DECIMAL(6,2) NOT NULL,
+    uso_memoria_virtual_mb DECIMAL(6,2) NOT NULL,
+    fk_servidor INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
+    PRIMARY KEY (id_proc)
+);
 END
