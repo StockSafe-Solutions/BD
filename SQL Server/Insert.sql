@@ -233,9 +233,9 @@ BEGIN
 	INSERT INTO StockSafe.dbo.tb_tag (nome_tag, cor_tag)
 	VALUES 
 	  ('Principal', 'rgb(75, 181, 51)'),
-	  ('Backup', 'rgb(255, 225, 31)'),
+	  ('Backup', 'rgb(185, 160, 3)'),
 	  ('Em operação', 'rgb(7, 77, 85)'),
-	  ('Em manutençãoo', 'rgb(255, 46, 46)'),
+	  ('Em manutenção', 'rgb(255, 46, 46)'),
 	  ('Fora de serviço', 'rgb(51, 51, 51)'),
 	  ('Ações', 'rgb(107, 107, 199)'),
 	  ('Clientes', 'rgb(92, 90, 66)'),
