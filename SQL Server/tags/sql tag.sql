@@ -1,3 +1,6 @@
+USE StockSafe;
+GO
+
 CREATE OR ALTER VIEW vw_tag_mais_servidores AS
 SELECT TOP 1
 nome_tag,
@@ -8,6 +11,7 @@ FROM
     JOIN tb_tag_servidor AS ts on t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY (qtd_servidores) DESC;
+GO;
 
 CREATE OR ALTER VIEW vw_tag_menos_servidores AS
 SELECT TOP 1
@@ -20,6 +24,7 @@ FROM
     JOIN tb_tag_servidor AS ts on t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY (qtd_servidores);
+GO;
 
 CREATE OR ALTER VIEW vw_tag_maior_consumo AS
 SELECT TOP 1
@@ -32,6 +37,7 @@ JOIN tb_tag_servidor AS ts ON v.fk_servidor = ts.fk_servidor
 JOIN tb_tag AS t ON t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY media_total DESC;
+GO;
 
 CREATE OR ALTER VIEW vw_tag_mais_erros AS
 SELECT TOP 1
@@ -44,6 +50,7 @@ JOIN tb_tag_servidor AS ts ON t.id_tag = ts.fk_tag
 JOIN tb_alerta AS a ON a.fk_servidor = ts.fk_servidor
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY quantidade_erros DESC;
+GO;
 
 CREATE OR ALTER VIEW vw_kpis_tags AS
 SELECT
@@ -67,6 +74,7 @@ vw_tag_mais_servidores AS maS,
 vw_tag_menos_servidores AS meS,
 vw_tag_maior_consumo AS mc,
 vw_tag_mais_erros AS me;
+GO;
 
 select
 data_hora,
@@ -79,20 +87,20 @@ where id_tag = 1
 group by data_hora;
 
 SELECT
-		avg(taxt.taxa_de_transferência) AS kpi_taxa,
-		avg(opt.taxa_de_transferência) AS base_taxa,
+		avg(taxt.taxa_de_transferencia) AS kpi_taxa,
+		(select taxa_de_transferencia from tb_opcao) AS base_taxa,
 		sum(pct.pacotes_enviados) AS kpi_pacotes_enviados,
 		sum((armazenamento_usado * 100) / armazenamento_total) AS kpi_armazenamento,
 		sum(armazenamento_total) AS base_armazenamento
 		FROM tb_servidor
-			JOIN vw_taxa_de_transferência AS taxt ON taxt.fk_servidor = id_servidor
-			JOIN tb_opcao AS opt
+			JOIN vw_taxa_de_transferencia AS taxt ON taxt.fk_servidor = id_servidor
 			JOIN vw_pacotes_enviados AS pct ON pct.fk_servidor = id_servidor
             JOIN tb_tag_servidor AS ts ON ts.fk_servidor = id_servidor
             JOIN tb_tag AS t ON t.id_tag = ts.fk_tag
 			WHERE id_tag = 1 OR id_tag = 2
             GROUP BY DAY(pct.data_hora);
-            
+GO
+
 CREATE OR ALTER VIEW vw_historico_tags AS
 SELECT
 t.nome_tag,
@@ -106,8 +114,4 @@ JOIN tb_tag_servidor AS ts ON s.id_servidor = ts.fk_servidor
 JOIN tb_tag AS t ON t.id_tag = ts.fk_tag
 WHERE
 	a.data_hora >= DATEADD(day,-30,GETDATE()) 
-	AND a.data_hora <= getdate()
-	
-
-
-
+	AND a.data_hora <= getdate();
