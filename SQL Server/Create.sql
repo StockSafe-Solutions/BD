@@ -25,6 +25,7 @@ BEGIN
 		codigo CHAR(6) NOT NULL,
 		armazenamento_total DECIMAL(4, 1) null,
 		armazenamento_usado DECIMAL(4, 1) null,
+        data_hora DATETIME2 DEFAULT CURRENT_TIMESTAMP,
 		id_autenticador INT,
 		PRIMARY KEY (id_servidor),
 		FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
