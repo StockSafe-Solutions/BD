@@ -13,7 +13,6 @@ CREATE VIEW vw_kpi_especifica AS
     FROM tb_servidor s
     JOIN vw_taxa_de_transferencia taxt ON taxt.fk_servidor = s.id_servidor
     JOIN vw_pacotes_enviados pct ON pct.fk_servidor = s.id_servidor
-    GROUP BY s.id_servidor, s.codigo, DAY(pct.data_hora);
+    GROUP BY s.id_servidor, s.codigo;
 
 SELECT * FROM vw_kpi_especifica WHERE codigo = 'SVJW32';
-SELECT * FROM vw_kpi_especifica;

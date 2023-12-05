@@ -30,7 +30,7 @@ CREATE OR ALTER VIEW vw_servidor
 	AS
 	SELECT
 	s.*,
-		FORMAT(data_hora, 'dd m., yyyy', 'pt-BR') AS 'ultimaData',
+		FORMAT(data_hora, 'dd/MM, yyyy', 'pt-BR') AS 'ultimaData',
 		FORMAT(data_hora, 'HH:mm', 'pt-BR') AS 'ultimoHorario'
 	FROM tb_servidor s
 	LEFT OUTER JOIN (
@@ -90,7 +90,6 @@ CREATE OR ALTER VIEW vw_ram_geral AS
 	  DATEPART(HOUR, data_hora),
 	  DATEPART(MINUTE, data_hora);
 GO
-
 CREATE OR ALTER VIEW vw_taxa_de_transferencia AS
     SELECT
         fk_servidor,
@@ -107,5 +106,14 @@ CREATE OR ALTER VIEW vw_pacotes_enviados AS
 	FROM vw_registro
 	GROUP BY data_hora, fk_servidor;
 
-
-
+-- KPI Geral (FORA DE VIEW PARA PODEMOS USAR O WHERE EM UMA COLUNA QUE NÃO É RETORNADA)
+	SELECT
+        AVG(taxt.taxa_de_transferencia) AS kpi_taxa,
+        SUM(pct.pacotes_enviados) AS kpi_pacotes_enviados,
+        SUM((s.armazenamento_usado * 100.0) / s.armazenamento_total) AS kpi_armazenamento,
+        SUM(s.armazenamento_total) AS base_armazenamento
+    FROM tb_servidor s
+    JOIN vw_taxa_de_transferencia taxt ON taxt.fk_servidor = s.id_servidor
+    JOIN vw_pacotes_enviados pct ON pct.fk_servidor = s.id_servidor
+    WHERE codigo = "SVJW32";
+   
