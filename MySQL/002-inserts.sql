@@ -18,7 +18,9 @@ INSERT INTO tb_categoria VALUES
 		(1, "Pacotes enviados", null),
 		(2, "Uso da CPU", "%"),
 		(3, "Uso da RAM", "%"),
-		(4, "Taxa de transferência", "MB/s");
+		(4, "Taxa de transferência", "MB/s"),
+        (5,'Total da RAM','GB'),
+        (6,'Uso disponivel da RAM','%');
 
 INSERT INTO tb_monitorar VALUES 
 		(1,1),(1,2),(1,3),(1,4),
