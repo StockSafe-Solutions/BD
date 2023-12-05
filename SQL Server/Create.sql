@@ -100,12 +100,11 @@ BEGIN
 	CREATE TABLE dbo.tb_tag (
 		id_tag INT IDENTITY(1, 1) NOT NULL,
 		nome_tag VARCHAR(75) NOT NULL,
-		cor_tag CHAR(6) NOT NULL,
+		cor_tag VARCHAR(18) NOT NULL,
 		UNIQUE (nome_tag),
 		PRIMARY KEY (id_tag)
 	);
 END
-
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'tb_tag_servidor')
 BEGIN
