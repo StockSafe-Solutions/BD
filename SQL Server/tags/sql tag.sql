@@ -1,6 +1,7 @@
-USE StockSafe;
 GO
+USE StockSafe;
 
+GO
 CREATE OR ALTER VIEW vw_tag_mais_servidores AS
 SELECT TOP 1
 nome_tag,
@@ -11,8 +12,8 @@ FROM
     JOIN tb_tag_servidor AS ts on t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY (qtd_servidores) DESC;
-GO;
 
+GO
 CREATE OR ALTER VIEW vw_tag_menos_servidores AS
 SELECT TOP 1
 id_tag,
@@ -24,8 +25,8 @@ FROM
     JOIN tb_tag_servidor AS ts on t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY (qtd_servidores);
-GO;
 
+GO
 CREATE OR ALTER VIEW vw_tag_maior_consumo AS
 SELECT TOP 1
 id_tag,
@@ -37,8 +38,8 @@ JOIN tb_tag_servidor AS ts ON v.fk_servidor = ts.fk_servidor
 JOIN tb_tag AS t ON t.id_tag = ts.fk_tag
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY media_total DESC;
-GO;
 
+GO
 CREATE OR ALTER VIEW vw_tag_mais_erros AS
 SELECT TOP 1
 id_tag,
@@ -50,8 +51,8 @@ JOIN tb_tag_servidor AS ts ON t.id_tag = ts.fk_tag
 JOIN tb_alerta AS a ON a.fk_servidor = ts.fk_servidor
 GROUP BY id_tag, nome_tag, cor_tag
 ORDER BY quantidade_erros DESC;
-GO;
 
+GO
 CREATE OR ALTER VIEW vw_kpis_tags AS
 SELECT
 maS.nome_tag as tag_mais_servidores,
@@ -74,8 +75,8 @@ vw_tag_mais_servidores AS maS,
 vw_tag_menos_servidores AS meS,
 vw_tag_maior_consumo AS mc,
 vw_tag_mais_erros AS me;
-GO;
 
+GO
 select
 data_hora,
 round(avg (uso_da_cpu),1) as uso_da_cpu,
@@ -86,6 +87,7 @@ join tb_tag as t on ts.fk_tag = t.id_tag
 where id_tag = 1
 group by data_hora;
 
+GO
 SELECT
 		avg(taxt.taxa_de_transferencia) AS kpi_taxa,
 		(select taxa_de_transferencia from tb_opcao) AS base_taxa,
@@ -99,8 +101,8 @@ SELECT
             JOIN tb_tag AS t ON t.id_tag = ts.fk_tag
 			WHERE id_tag = 1 OR id_tag = 2
             GROUP BY DAY(pct.data_hora);
-GO
 
+GO
 CREATE OR ALTER VIEW vw_historico_tags AS
 SELECT
 t.nome_tag,
