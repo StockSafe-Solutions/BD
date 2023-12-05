@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS tb_funcionario (
   email VARCHAR(125),
   senha VARCHAR(20),
   PRIMARY KEY (id_funcionario)
-  );
+);
   
 CREATE TABLE IF NOT EXISTS tb_servidor (
   id_servidor INT NOT NULL AUTO_INCREMENT,
@@ -28,15 +28,14 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   id_autenticador INT,
   PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
-    ) 
-    AUTO_INCREMENT = 2000;
+);
 
 CREATE TABLE IF NOT EXISTS tb_categoria(
 	id_cat INT NOT NULL,
     tipo_cat VARCHAR(45) NOT NULL,
     unidade_cat VARCHAR(25),
     PRIMARY KEY (id_cat)
-	);
+);
 
 CREATE TABLE IF NOT EXISTS tb_monitorar(
 	fk_servidor INT NOT NULL,
@@ -44,7 +43,7 @@ CREATE TABLE IF NOT EXISTS tb_monitorar(
     PRIMARY KEY (fk_servidor, fk_cat),
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
     FOREIGN KEY (fk_cat) REFERENCES tb_categoria (id_cat)
-	);
+);
 
 CREATE TABLE IF NOT EXISTS tb_registro (
   id_registro INT NOT NULL AUTO_INCREMENT,
@@ -55,7 +54,7 @@ CREATE TABLE IF NOT EXISTS tb_registro (
   PRIMARY KEY (id_registro, fk_servidor,fk_cat),
   FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
   FOREIGN KEY (fk_cat) REFERENCES tb_categoria (id_cat)
-	);
+);
     
 CREATE TABLE IF NOT EXISTS tb_opcao (
   id_opcao INT NOT NULL AUTO_INCREMENT,
@@ -90,3 +89,18 @@ CREATE TABLE IF NOT EXISTS tb_processo (
     FOREIGN KEY (fk_servidor) REFERENCES tb_servidor(id_servidor),
     PRIMARY KEY (id_proc)
 );
+
+CREATE TABLE tb_tag (
+	id_tag INT NOT NULL AUTO_INCREMENT,
+    nome_tag VARCHAR(75) NOT NULL UNIQUE,
+	cor_tag CHAR(6) NOT NULL,
+    PRIMARY KEY (id_tag)
+    );
+    
+CREATE TABLE tb_tag_servidor(
+	fk_servidor INT NOT NULL,
+    fk_tag INT NOT NULL,
+    FOREIGN KEY (fk_servidor) REFERENCES tb_servidor (id_servidor),
+    FOREIGN KEY (fk_tag) REFERENCES tb_tag (id_tag),
+    PRIMARY KEY (fk_servidor, fk_tag)
+	);
