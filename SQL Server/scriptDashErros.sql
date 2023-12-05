@@ -56,7 +56,7 @@ END;
 EXECUTE kpi_uptime_erro @taxa_atualizacao = 1;
 
 
--- Utiliza GO para separar o CREATE PROCEDURE do restante do script
+
 IF OBJECT_ID('dash_geral_erros', 'P') IS NOT NULL
     DROP PROCEDURE dash_geral_erros;
 GO

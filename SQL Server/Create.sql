@@ -18,7 +18,7 @@ use StockSafe;
     codigo char(6) not null,
     armazenamento_total decimal(4, 1) null,
     armazenamento_usado decimal(4, 1) null,
-    data_hora datetime2 default current_timestamp,
+	data_hora DATETIME DEFAULT GETDATE(),
     id_autenticador int,
     primary key (id_servidor),
     foreign key (id_autenticador) references tb_funcionario (id_funcionario)
