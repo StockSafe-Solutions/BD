@@ -43,17 +43,18 @@ use StockSafe;
     id_registro int identity(1, 1) not null,
     fk_servidor int not null,
     fk_cat int not null,
-    data_hora datetime2 default current_timestamp,
+    data_hora DATETIME DEFAULT GETDATE(),
     valor decimal(8, 2) not null,
     primary key (id_registro, fk_servidor, fk_cat),
     foreign key (fk_servidor) references tb_servidor (id_servidor),
     foreign key (fk_cat) references tb_categoria (id_cat)
   )
 
+
   create table tb_opcao (
     id_opcao int identity(1, 1) not null,
     banda_larga smallint default 155,
-    taxa_de_transfer�ncia decimal(10, 2) default 1000.00,
+    taxa_de_transferencia decimal(10, 2) default 1000.00,
     intervalo_atualizacao int default 60000,
     primary key (id_opcao)
   )
