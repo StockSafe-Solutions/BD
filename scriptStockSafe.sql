@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS tb_servidor (
   codigo CHAR(6) NOT NULL,
   armazenamento_total DECIMAL(4,1) NULL,
   armazenamento_usado DECIMAL(4,1) NULL,
+  data_hora DATETIME DEFAULT(now()),
   id_autenticador INT,
   PRIMARY KEY (id_servidor),
   FOREIGN KEY (id_autenticador) REFERENCES tb_funcionario (id_funcionario)
