@@ -30,7 +30,7 @@ CREATE OR ALTER VIEW vw_servidor
 	AS
 	SELECT
 	s.*,
-		FORMAT(data_hora, 'dd m., yyyy', 'pt-BR') AS 'ultimaData',
+		FORMAT(data_hora, 'dd/MM, yyyy', 'pt-BR') AS 'ultimaData',
 		FORMAT(data_hora, 'HH:mm', 'pt-BR') AS 'ultimoHorario'
 	FROM tb_servidor s
 	LEFT OUTER JOIN (
@@ -48,49 +48,42 @@ CREATE OR ALTER VIEW vw_cpu AS
 	SELECT
 	  fk_servidor,
 	  AVG(uso_da_cpu) AS uso_da_cpu,
-	  FORMAT(MAX(data_hora), 'dd/MM/yyyy HH:mm') AS dataDados
+	  FORMAT(MAX(data_hora), 'HH:mm') AS dataDados
 	FROM vw_registro
 	GROUP BY
 	  fk_servidor,
-	  DATEPART(YEAR, data_hora),
-	  DATEPART(MONTH, data_hora),
-	  DATEPART(DAY, data_hora),
-	  DATEPART(HOUR, data_hora),
-	  DATEPART(MINUTE, data_hora);
+	  DATEPART(HOUR, data_hora);
 GO
 
 
 CREATE OR ALTER VIEW vw_cpu_geral AS
 	SELECT
 	  AVG(uso_da_cpu) AS uso_da_cpu,
-	  FORMAT(MAX(data_hora), 'dd/MM/yyyy HH:mm') AS dataDados
+	  FORMAT(MAX(data_hora), 'HH:mm') AS dataDados
 	FROM vw_registro
 	GROUP BY
-	  DATEPART(YEAR, data_hora),
-	  DATEPART(MONTH, data_hora),
-	  DATEPART(DAY, data_hora),
-	  DATEPART(HOUR, data_hora),
-	  DATEPART(MINUTE, data_hora);
+	  DATEPART(HOUR, data_hora);
 GO
-CREATE OR ALTER VIEW vw_ram AS
-	SELECT fk_servidor, AVG(uso_da_ram) AS uso_da_ram, FORMAT(data_hora, 'yyyy-MM-dd HH:mm') AS dataDados
-    FROM vw_registro
-	GROUP BY FORMAT(data_hora, 'yyyy-MM-dd HH:mm'), fk_servidor;
 
+CREATE OR ALTER VIEW vw_ram AS
+	SELECT
+		fk_servidor,
+		AVG(uso_da_ram) AS uso_da_ram, 
+		FORMAT(data_hora, 'HH:mm') AS dataDados
+    FROM vw_registro
+    WHERE uso_da_ram IS NOT NULL
+	GROUP BY fk_servidor, FORMAT(data_hora, 'HH:mm');
 GO
+
 CREATE OR ALTER VIEW vw_ram_geral AS
 	SELECT
 	  AVG(uso_da_ram) AS uso_da_ram,
-	  FORMAT(MAX(data_hora), 'dd/MM/yyyy HH:mm') AS dataDados
+	  FORMAT(MAX(data_hora), 'HH:mm') AS dataDados
 	FROM vw_registro
+	WHERE uso_da_ram IS NOT NULL
 	GROUP BY
-	  DATEPART(YEAR, data_hora),
-	  DATEPART(MONTH, data_hora),
-	  DATEPART(DAY, data_hora),
-	  DATEPART(HOUR, data_hora),
-	  DATEPART(MINUTE, data_hora);
+	  DATEPART(HOUR, data_hora);
 GO
-
 CREATE OR ALTER VIEW vw_taxa_de_transferencia AS
     SELECT
         fk_servidor,
@@ -107,5 +100,14 @@ CREATE OR ALTER VIEW vw_pacotes_enviados AS
 	FROM vw_registro
 	GROUP BY data_hora, fk_servidor;
 
-
-
+-- KPI Geral (FORA DE VIEW PARA PODEMOS USAR O WHERE EM UMA COLUNA QUE NÃO É RETORNADA)
+	SELECT
+        AVG(taxt.taxa_de_transferencia) AS kpi_taxa,
+        SUM(pct.pacotes_enviados) AS kpi_pacotes_enviados,
+        SUM((s.armazenamento_usado * 100.0) / s.armazenamento_total) AS kpi_armazenamento,
+        SUM(s.armazenamento_total) AS base_armazenamento
+    FROM tb_servidor s
+    JOIN vw_taxa_de_transferencia taxt ON taxt.fk_servidor = s.id_servidor
+    JOIN vw_pacotes_enviados pct ON pct.fk_servidor = s.id_servidor
+    WHERE s.codigo = 'SVJW32';
+   
